@@ -1,4 +1,5 @@
 import argparse
+import re
 from ply import lex
 import ply.yacc as yacc
 
@@ -13,6 +14,8 @@ tokens = (
     'CLOSE_BRACE',
     'NEWLINE',
     'SCAPE',
+    'CORRECT',
+    'WRONG',
     'CHAR'
 )
 
@@ -27,7 +30,7 @@ def t_NEWLINE(t):
     t.lexer.lineno += 1
     return t
 
-# t_ignore = ' \t'
+#t_ignore = ' \t'
 
 # Ignore comments.
 def t_COMMENT(t):
@@ -89,12 +92,28 @@ def p_expression_answer_expr(p):
     if len(p) == 1:
         p[0] = ''
     elif len(p) == 3:
-        p[0] = p[1] + p[2]
+        p[0] = p[1] + ', ' + p[2]
 
 
 def p_expression_answer(p):
     'answer : string NEWLINE'
-    p[0] = p[1] + ', '
+
+    clean_string = p[1].strip()
+    prefix = clean_string[0]
+    typea = '[multiple choice]'
+
+    # Type of question: short answer.
+    if prefix == '=' and re.match(r'^%[0-9]+%', clean_string[1:]):
+        typea = '[short answer]'
+    elif prefix == '~' and re.match(r'^%[0-9]+%', clean_string[1:]):
+        typea = '[multiple choice]'
+
+    if prefix == '=':
+        prefix = '[OK]'
+    elif prefix == '~':
+        prefix = '[ERROR]'
+
+    p[0] = prefix + typea + clean_string[1:]
 
 
 def p_expression_string(p):
@@ -106,6 +125,7 @@ def p_expression_string(p):
         p[0] = p[1]
     elif len(p) == 3:
         p[0] = p[1] + p[2]
+
 
 def p_expression_n_nl(p):
     """
@@ -137,7 +157,7 @@ parser = yacc.yacc()
 ##############################################################################
 
 def parse_input_arguments():
-    parser = argparse.ArgumentParser(description='Stats generator about subjects sessions.')
+    parser = argparse.ArgumentParser(description='GIFT Moodle file parser.')
     parser.add_argument('-f', '--file', dest='file', required=True,
                         help='GIFT Moodle file.')
     args = parser.parse_args()
