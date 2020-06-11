@@ -98,22 +98,36 @@ def p_expression_answer_expr(p):
 def p_expression_answer(p):
     'answer : string NEWLINE'
 
+    # Clean before and after spaces from string and gets the prefix 
+    # (= or ~).
     clean_string = p[1].strip()
     prefix = clean_string[0]
     typea = '[multiple choice]'
 
-    # Type of question: short answer.
+    # Get answer text part. For example: from '=%100%The answer' gets 
+    # 'The answer'.
+    pattern = re.compile('^[=~](%[0-9]+%){0,1}(.+)$')
+    match = pattern.match(clean_string)
+    if not match or not match.group(2):
+        print(f'Answer bad formed: {clean_string}')
+        raise Exception(f'Syntax error in the answer: {clean_string}')
+    answer = match.group(2)
+    
+
+    # Type of question: short answer or multiple choice.
     if prefix == '=' and re.match(r'^%[0-9]+%', clean_string[1:]):
+        pattern = re.compile('^%[0-9]+%(?P<name>.*?)')
         typea = '[short answer]'
     elif prefix == '~' and re.match(r'^%[0-9]+%', clean_string[1:]):
         typea = '[multiple choice]'
 
+    # Convert prefix in a meaning one.
     if prefix == '=':
         prefix = '[OK]'
     elif prefix == '~':
         prefix = '[ERROR]'
 
-    p[0] = prefix + typea + clean_string[1:]
+    p[0] = prefix + typea + answer
 
 
 def p_expression_string(p):
