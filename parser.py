@@ -41,7 +41,7 @@ def t_newline(t):
 
 # Error.
 def t_error(t):
-    print('Illegal character "%s"' % t.value[0])
+    print(f"Illegal character '{t.value[0]}' at line {t.lineno}")
     t.lexer.skip(1)
 
 lexer = lex.lex()
@@ -51,21 +51,18 @@ lexer = lex.lex()
 
 def p_expression_gift_file(p):
     """
-    gift_file : optional_newline
-    gift_file : NEWLINE gift_file
+    gift_file : optional_newline gift_file
     gift_file : question_expr
     gift_file : question_expr endquestion gift_file
     """
-    if len(p) == 2 and p[1] != 'NEWLINE':
+    if len(p) == 1:
         p[0] = ''
-    elif len(p) == 2 and p[1] == 'NEWLINE':
-        p[0] = p[1]
     elif len(p) == 3:
         p[0] = p[2]
-    elif len(p) == 4 and p[3] != '':
-        p[0] = p[1] + '\n' + p[3]
-    elif len(p) == 4 and p[3] == '':
+    elif len(p) == 2:
         p[0] = p[1]
+    elif len(p) == 4:
+        p[0] = p[1] + '\n' + p[3]
 
 
 def p_expression_question_expr(p):
@@ -130,7 +127,7 @@ def p_expression_answer(p):
 
 
 def p_expression_endquestion(p):
-    'endquestion : NEWLINE NEWLINE'
+    'endquestion : NEWLINE NEWLINE optional_newline'
 
 
 def p_expression_optional_newline(p):
