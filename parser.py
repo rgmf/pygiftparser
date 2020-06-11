@@ -17,7 +17,7 @@ tokens = (
 )
 
 # Regular expression rules for simple tokens.
-t_COLONCOLON       = r'::'
+t_COLONCOLON  = r'::'
 t_OPEN_BRACE  = r'{'
 t_CLOSE_BRACE = r'}'
 t_SCAPE       = r'\\.'
@@ -49,91 +49,75 @@ lexer = lex.lex()
 
 # Yacc ########################################################################
 
-def p_expression_gift_file(p):
+def p_expression_goal(p):
+    'goal : n_nl gift'
+    p[0] = p[2]
+
+
+def p_expression_gift(p):
     """
-    gift_file : optional_newline gift_file
-    gift_file : question_expr
-    gift_file : question_expr endquestion gift_file
+    gift : question
+    gift : gift NEWLINE NEWLINE n_nl question
+    """
+    if len(p) == 2:
+        p[0] = p[1]
+    elif len(p) == 6:
+        p[0] = p[1] + '\n' + p[5]
+
+
+def p_expression_question(p):
+    'question : string brace_expr'
+    p[0] = p[1] + p[2]
+
+
+def p_expression_brace_expr(p):
+    """
+    brace_expr :
+    brace_expr : OPEN_BRACE 1_nl answer_expr CLOSE_BRACE
+    """
+    if len(p) == 1:
+        p[0] = ''
+    elif len(p) == 5:
+        p[0] = ' (' + p[3] + ') '
+
+
+def p_expression_answer_expr(p):
+    """
+    answer_expr : 
+    answer_expr : answer_expr answer
     """
     if len(p) == 1:
         p[0] = ''
     elif len(p) == 3:
-        p[0] = p[2]
-    elif len(p) == 2:
-        p[0] = p[1]
-    elif len(p) == 4:
-        p[0] = p[1] + '\n' + p[3]
+        p[0] = p[1] + p[2]
 
 
-def p_expression_question_expr(p):
-    """
-    question_expr : question_noname_expr
-    question_expr : question_withname_expr
-    """
-    p[0] = p[1]
-
-
-def p_expression_question_withname_expr(p):
-    """
-    question_withname_expr : COLONCOLON string COLONCOLON question
-    question_withname_expr : COLONCOLON string COLONCOLON question OPEN_BRACE optional_newline CLOSE_BRACE
-    question_withname_expr : COLONCOLON string COLONCOLON question OPEN_BRACE optional_newline answer optional_newline CLOSE_BRACE
-    """
-    if len(p) == 5 or len(p) == 8:
-        p[0] = p[2] + ": " + p[4]
-    elif len(p) == 10:
-        p[0] = p[2] + ": " + p[4] + "(" + p[7] + ")"
-
-
-def p_expression_question_noname_expr(p):
-    """
-    question_noname_expr : question
-    question_noname_expr : question OPEN_BRACE optional_newline CLOSE_BRACE
-    question_noname_expr : question OPEN_BRACE optional_newline answer optional_newline CLOSE_BRACE
-    """
-    if len(p) == 2 or len(p) == 5:
-        p[0] = p[1]
-    elif len(p) == 7:
-        p[0] = p[1] + "(" + p[4] + ")"
+def p_expression_answer(p):
+    'answer : string NEWLINE'
+    p[0] = p[1] + ', '
 
 
 def p_expression_string(p):
     """
+    string : string CHAR
     string : CHAR
-    string : CHAR string
     """
     if len(p) == 2:
         p[0] = p[1]
     elif len(p) == 3:
         p[0] = p[1] + p[2]
 
-
-def p_expression_question(p):
+def p_expression_n_nl(p):
     """
-    question : string
+    n_nl :
+    n_nl : n_nl NEWLINE
     """
-    p[0] = p[1]
 
 
-def p_expression_answer(p):
+def p_expression_1_nl(p):
     """
-    answer : string
-    answer : answer NEWLINE string
-    """
-    if len(p) == 2:
-        p[0] = p[1]
-    elif len(p) == 4:
-        p[0] = p[1] + ", " + p[3]
-
-
-def p_expression_endquestion(p):
-    'endquestion : NEWLINE NEWLINE optional_newline'
-
-
-def p_expression_optional_newline(p):
-    """
-    optional_newline :
-    optional_newline : NEWLINE optional_newline
+    1_nl :
+    1_nl : NEWLINE
     """
 
 
