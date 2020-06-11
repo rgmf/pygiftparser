@@ -106,11 +106,13 @@ def p_expression_answer(p):
 
     # Get answer text part. For example: from '=%100%The answer' gets 
     # 'The answer'.
+    # Also, extracts percentage if any without '%' symbol.
     pattern = re.compile('^[=~](%[0-9]+%){0,1}(.+)$')
     match = pattern.match(clean_string)
     if not match or not match.group(2):
         print(f'Answer bad formed: {clean_string}')
         raise Exception(f'Syntax error in the answer: {clean_string}')
+    percentage = '' if not match.group(1) else '[' + match.group(1)[1:-1] + ']'
     answer = match.group(2)
     
 
@@ -127,7 +129,7 @@ def p_expression_answer(p):
     elif prefix == '~':
         prefix = '[ERROR]'
 
-    p[0] = prefix + typea + answer
+    p[0] = prefix + typea + percentage + answer
 
 
 def p_expression_string(p):
