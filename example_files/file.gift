@@ -1,5 +1,17 @@
 // ::que pasa:: Un comentario de prueba.
 
+Una preguna sencilla y sin nada 
+
+Un pregunta senilla y con algo(=resp1 ~resp2 ~resp3 ~resp4)
+
+Una pregunta sencilla y con algo{
+=<p>respuesta 1</p>
+~<p>respuesta 2</p>
+~<p>respuesta 3</p>
+~<p>respuesta 4</p>
+}
+
+
 ::Pregunta::[html]<p>Pregunta de prueba<br></p>{
 =<p>respuesta 1</p>
 ~<p>respuesta 2</p>
@@ -13,3 +25,6 @@
 ~<p>respuesta 3</p>
 ~<p>respuesta 4</p>
 }
+
+::Pregunta::[html]<p>Pregunta de prueba<br></p>{=<p>respuesta 1</p> ~<p>respuesta 2</p> ~<p>respuesta 3</p> ~<p>respuesta 4</p>}
+
