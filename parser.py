@@ -26,7 +26,7 @@ t_COLONCOLON  = r'::'
 t_OPEN_BRACE  = r'{'
 t_CLOSE_BRACE = r'}'
 t_SCAPE       = r'\\.'
-t_CHAR        = r'[^:\{\}\n\\]' # everything less the other tokens.
+t_CHAR        = r'[^\{\}\n]' # everything less the other tokens.
 def t_NEWLINE(t):
     r'\n'
     t.lexer.lineno += 1
@@ -61,13 +61,24 @@ def p_expression_goal(p):
 
 def p_expression_gift(p):
     """
-    gift : question
-    gift : gift NEWLINE NEWLINE n_nl question
+    gift : question_type
+    gift : gift NEWLINE NEWLINE n_nl question_type
     """
     if len(p) == 2:
         p[0] = p[1]
     elif len(p) == 6:
         p[0] = p[1] + '\n' + p[5]
+
+
+def p_expression_question_type(p):
+    """
+    question_type : COLONCOLON string COLONCOLON question
+    question_type : question
+    """
+    if len(p) == 2:
+        p[0] = p[1]
+    elif len(p) == 5:
+        p[0] = p[2] + ': ' + p[4]
 
 
 def p_expression_question(p):

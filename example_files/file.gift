@@ -27,4 +27,3 @@ Una pregunta sencilla y con algo{
 }
 
 ::Pregunta::[html]<p>Pregunta de prueba<br></p>{=<p>respuesta 1</p> ~<p>respuesta 2</p> ~<p>respuesta 3</p> ~<p>respuesta 4</p>}
-
