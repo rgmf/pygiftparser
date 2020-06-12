@@ -60,6 +60,27 @@ def build_numerical_answer(match):
     }
 
 
+def idx_first(s, c1, c2):
+    posc1 = s.find('=')
+    posc2 = s.find('~')
+    if posc1 >= 0 and posc2 >= 0:
+        return min(posc1, posc2)
+    elif posc1 >= 0:
+        return posc1
+    else:
+        return posc2
+
+
+def get_first_answer(s):
+    idx = idx_first(s, '=', '~')
+    res = s[idx]
+    for i in s[idx + 1:]:
+        if i == '=' or i == '~':
+            break
+        res = res + i
+    return res
+
+
 def create_answer(answer):
     true_false_pattern = re.compile('^TRUE$|^FALSE$|^T$|^F$|^true$|^false$|^t$|^f$')
     multiple_or_short_patter = re.compile('^[=~](%[0-9]+%)(.+)$')

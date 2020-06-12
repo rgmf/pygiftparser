@@ -88,8 +88,40 @@ def p_expression_question(p):
 
 def p_expression_brace_expr(p):
     """
-    brace_expr :
-    brace_expr : OPEN_BRACE 1_nl answer_expr CLOSE_BRACE
+    brace_expr : brace_inline_expr
+    brace_expr : brace_multiline_expr
+    """
+    p[0] = p[1]
+
+
+def p_expression_brace_inline_expr(p):
+    """
+    brace_inline_expr : OPEN_BRACE string CLOSE_BRACE
+    """
+    clean_string = p[2].strip()
+
+    # Is a multiple answer?
+    n = len(''.join(clean_string.split('=')).split('~'))
+    if n > 1:
+        res = ''
+        pos = 0
+        copy_string = clean_string
+        for i in range(n):
+            a = answers.get_first_answer(copy_string)
+            clean_a = a.strip()
+            res = res + str(answers.create_answer(clean_a))
+            pos = len(a)
+            copy_string = clean_string[pos:]
+    else:
+        res = answers.create_answer(p[2].strip())
+
+    p[0] = '(' + str(res) + ')'
+
+
+def p_expression_brace_multiline_expr(p):
+    """
+    brace_multiline_expr :
+    brace_multiline_expr : OPEN_BRACE NEWLINE answer_expr CLOSE_BRACE
     """
     if len(p) == 1:
         p[0] = ''
@@ -100,16 +132,16 @@ def p_expression_brace_expr(p):
 def p_expression_answer_expr(p):
     """
     answer_expr : 
-    answer_expr : answer_expr answer
+    answer_expr : answer_expr answer NEWLINE
     """
     if len(p) == 1:
         p[0] = ''
-    elif len(p) == 3:
+    elif len(p) == 4:
         p[0] = p[1] + ', ' + p[2]
 
 
 def p_expression_answer(p):
-    'answer : string NEWLINE'
+    'answer : string'
     res = answers.create_answer(p[1].strip())
     p[0] = str(res)
 
