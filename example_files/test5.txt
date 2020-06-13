@@ -1,0 +1,292 @@
+// IMR - Tema 5. Cableado estructurado. Examen Moodle:
+
+// Apartado 1. Sistema de cableado estructurado
+// Apartado 2. Elementos de un sistema de cableado estructurado
+// Apartado 2.1. Área de trabajo
+
+$CATEGORY: T5/Apartado-1,2,2.1
+
+Según el sistema de cableado estructurado: las redes deben adaptarse a los cambios o ampliaciones de los edificios. { TRUE }
+
+Según el sistema de cableado estructurado: la eficiencia de una red se consigue separando los servicios de datos, voz y videovigilancia. { FALSE }
+
+Según el sistema de cableado estructurado: la tecnología avanza muy rápido y debemos tener en cuenta que habrá que renovar la red. { TRUE }
+
+¿Cuál de los siguientes NO es un principio fundamental del cableado estructurado? {
+	~Los edificios sobre los que se asientan las redes son lugares sometidos a cambios.
+	~La tecnología evoluciona y los dispositivos habrá que cambiarlos al quedarse obsoletos.
+	~La eficiencia de una red se consigue centralizando los servicios.
+	=Las redes deben diseñarse de forma que no tengamos que modificarlas en el futuro.
+}
+
+¿Cómo se denomina al lugar donde se ubica un equipo o dispositivo que se utilizará para conectarse a la red? {
+	=%100%área de trabajo
+	=%80%area de trabajo
+	=%80%área trabajo
+	=%50%area trabajo
+}
+
+¿Con qué abreviatura se conoce la "toma de telecomunicaciones"? {
+	=%100%TO
+	=%100%T.O.
+	=%100%T.O
+}
+
+¿Cuántas tomas de red se recomienda asignar a un área de trabajo? {
+	=Al menos tres
+	~Una
+	~Menos de tres
+	~No más de dos
+	~Cuatro, ni una más ni una menos
+}
+
+¿Cuál puede ser la distancia máxima del cable que conecta un equipo con la toma de telecomunicaciones? {
+	=%100%5m
+	=%100%5 m
+	=%100%5 metros
+	=%100%cinco metros
+	=%80%5
+	=%80%cinco
+}
+
+
+// Apartado 2.2. Distribuidor de planta
+// Apartado 2.3. Subsistema horizontal
+
+$CATEGORY: T5/Apartado-2.2,2.3
+
+¿Cómo se llama el elemento que centraliza todo el cableado del subsistema horizontal? {
+	=%100%FD
+	=%100%F.D.
+	=%100%Distribuidor de planta
+	=%100%Distribuidor planta
+	=%100%Floor distributor
+}
+
+¿Con qué abreviatura se conoce el "Distribuidor de planta"? {
+	=%100%FD
+	=%100%F.D.
+}
+
+¿Con qué abreviatura se conoce la "Sala de telecomunicaciones"? {
+	=%100%TR
+	=%100%T.R.
+}
+
+¿Cuál de las siguientes recomendaciones sobre la sala de telecomunicaciones NO es cierta? {
+	=La puerta debe abrir hacia afuera y debe poder cerrarse desde dentro
+	~La canalización recomendable es de suelo técnico
+	~No debe compartirse con instalaciones eléctricas
+	~Debe estar protegida frente a incendios
+	~Debe estar bien iluminada y ventilada
+}
+
+¿Qué tipo de canalización se recomienda para una sala de telecomunicaciones? {
+	=Canalización en suelo técnico
+	~Canalización en superficie
+	~Canalización en pared
+	~Todas serían válidas
+	~Canalización en pared técnica
+}
+
+¿Cuál de los siguientes elementos NO forma parte del subsistema horizontal? {
+	=Distribuidor de edificio
+	~Distribuidor de planta
+	~Áreas de trabajo
+	~Cableado desde el área de trabajo hasta el distribuidor de planta
+}
+
+¿Qué tipo de canalización se realiza en la superficie de las paredes mediante canaleta o guías metálicas? {
+	=Canalización en superficie
+	~Canalización en pared
+	~Canalización en techo técnico
+	~Canalización en suelo técnico
+	~Ninguna de las otras respuestas es correcta
+}
+
+¿En qué tipo de canalización las canalizaciones se fijan con soportes al techo, quedando a la vista? {
+	=Canalización en techo
+	~Canalización en techo técnico
+	~Canalización en superficie
+	~Canalización en techo fijo
+	~Ninguna de las otras respuestas es correcta
+}
+
+¿Qué tipo de canalización hace típicamente uso de canaleta? {
+	~Suelo técnico
+	~Techo técnico
+	=Canalización en superficie
+	~Canalización en pared
+	~Canalización en techo
+}
+
+¿Cuál es la distancia máxima entre TO y FD? {
+	=%100%90m
+	=%100%90 m
+	=%100%90 metros
+	=%100%90
+}
+
+
+// Apartado 2.4. Distribuidor de edificio
+// Apartado 2.5. Subsistema vertical
+
+$CATEGORY: T5/Apartado-2.4,2.5
+
+¿Cómo se llama el elemento que recoge todo el cableado proveniente de los diferentes distribuidores de planta? {
+	=%100%BD
+	=%100%B.D.
+	=%100%Distribuidor de edificio
+	=%100%Distribuidor edificio
+	=%100%Building distributor
+}
+
+¿Con qué abreviatura se conoce el "Distribuidor de edificio"? {
+	=%100%BD
+	=%100%B.D.
+}
+
+En el cableado estructurado, ¿a qué parte del sistema nos referimos con el término "backbone”? {
+	=Subsistema vertical
+	~Subsistema horizontal
+	~Subsistema de campus
+	~Distribuidor de edificio
+	~Ninguna de las otras respuestas es correcta
+}
+
+¿Con qué otro nombre se conoce al susbsistema vertical? {
+	=%100%Backbone
+}
+
+¿Cuál de las siguientes afirmaciones sobre el "distribuidor de edificio" NO es verdadera? {
+	=Se utiliza para recoger todo el cableado proveniente de los edificios cercanos
+	~Se suele colocar en la planta baja del edificio
+	~Hay que evitar situar el distribuidor de edificio en sótanos
+	~El distribuidor de planta y el distribuidor de edificio pueden situarse en la misma sala de telecomunicaciones
+}
+
+¿Cuál de las siguientes afirmaciones sobre el subsistema vertical NO es verdadera? {
+	=La distancia máxima del cableado vertical es de 100 metros
+	~El subsistema vertical está compuesto por el cableado que va desde los distribuidores de planta hasta el distribuidor de edificio.
+	~El backbone nunca debe instalarse en bajantes destinadas a otro uso como pueden ser desagües de aguas.
+	~En un edificio solamente puede haber un subsistema vertical.
+	~En edificios de varias plantas la sala de telecomunicaciones tiende a ubicarse en el mismo lugar en todas las plantas.
+}
+
+¿Cuál es la distancia máxima entre un distribuidor de planta y el distribuidor de edificio empleando fibra óptica? {
+	=%100%300m
+	=%100%300 m
+	=%100%300 metros
+	=%80%300
+}
+
+¿Cuál es la distancia máxima entre un distribuidor de planta y el distribuidor de edificio empleando cable de par trenzado? {
+	=%100%100m
+	=%100%100 m
+	=%100%100 metros
+	=%80%100
+}
+
+¿Cuántos Distribuidores de edificio puede haber como máximo en un edificio? {
+	=Uno
+	~Dos
+	~Todos los que sean necesarios
+	~Depende del tamaño de la red
+	~Ninguna de las otras respuestas es correcta
+}
+
+
+// Apartado 2.6. Distribuidor de campus
+// Apartado 2.7. Subsistema de campus
+
+$CATEGORY: T5/Apartado-2.6,2.7
+
+¿Cómo se llama el elemento que conecta los distribuidores de edificios a través de un cableado troncal? {
+	=%100%CD
+	=%100%C.D.
+	=%100%Distribuidor de campus
+	=%100%Distribuidor campus
+	=%100%Campus distributor
+}
+
+En una red con varios edificios, ¿cómo se llama el elemento que conecta los diferentes edificios? {
+	=Distribuidor de campus
+	~Distribuidor de edificio
+	~Distribuidor central
+	~Ninguna de las otras respuestas es correcta
+	~Edificio principal
+}
+
+¿Con qué abreviatura se conoce el "Distribuidor de campus"? {
+	=%100%CD
+	=%100%C.D.
+}
+
+¿Cómo se llama el edificio en el que se sitúa el "Distribuidor de campus?" {
+	=%100%Edificio principal
+	=%100%Principal
+}
+
+En el sistema de cableado estructurado: el distribuidor de campus debe situarse en el punto medio entre todos los edificios del campus { FALSE }
+
+La canalización recomendada para el subsistema de campus es: {
+	=Bajo suelo
+	~Techo técnico
+	~Suelo técnico
+	~En superficie
+	~En pared
+}
+
+¿Cuál es el tipo de cable recomendado para el subsistema de campus? {
+	=Fibra óptica
+	~Cable de par trenzado
+	~Cable coaxial
+	~ADSL
+	~Conexión inalámbrica
+}
+
+¿Cuál de los siguientes elementos forma parte del subsistema de campus? {
+	~Distribuidor de planta
+	=Distribuidor de campus
+	~Distribuidor de edificio
+	~Cableado entre el FD y BD
+	~Ninguna es correcta
+}
+
+¿Cuál de los siguientes elementos forma parte del subsistema de campus? {
+	~Distribuidor de planta
+	~Distribuidor de edificio
+	=Cableado entre el CD y los BD
+	~Cableado entre el FD y el BD
+	~Ninguna es correcta
+}
+
+¿Cómo se llama la representación gráfica de redes en la que se utiliza el plano del edificio como base para dibujar la red? {
+	~Representación lógica de red
+	=Representación física de red
+	~Diagrama de red
+	~Todas las respuestas son ciertas
+}
+
+¿Cómo se llama la representación gráfica de redes en la que se representa la red en forma de esquema? {
+	=Representación lógica de red
+	~Representación física de red
+	~Diagrama de red
+	~Todas las respuestas son ciertas
+}
+
+[html]¿Qué elemento de red representa el siguiente símbolo?
+<br>
+<img width\="200" src\="http://www.newdesignfile.com/postpic/2010/04/cisco-switch-icon_309116.jpg"/>
+{
+	=%100%Switch
+	=%100%Conmutador
+}
+
+[html]¿Qué elemento de red representa el siguiente símbolo?
+<br>
+<img width\="200" src\="https://3.bp.blogspot.com/-oEMazpptpR8/UWOET9aDYgI/AAAAAAAAAH0/XZFW7gxWrgI/s1600/Cisco-Router-Commands-images.jpg"/>
+{
+	=%100%Router
+	=%100%Enrutador
+}

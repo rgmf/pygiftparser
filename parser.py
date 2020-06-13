@@ -4,6 +4,7 @@ from ply import lex
 import ply.yacc as yacc
 
 import answers
+import preprocessor
 
 
 # Lex #########################################################################
@@ -36,7 +37,7 @@ def t_NEWLINE(t):
 
 # Ignore comments.
 def t_COMMENT(t):
-    r'[ \t]*//.*'
+    r'^[ \t]*//.*'
     pass
 
 def t_newline(t):
@@ -62,12 +63,12 @@ def p_expression_goal(p):
 def p_expression_gift(p):
     """
     gift : question_type
-    gift : gift NEWLINE NEWLINE n_nl question_type
+    gift : gift NEWLINE NEWLINE question_type
     """
     if len(p) == 2:
         p[0] = p[1]
-    elif len(p) == 6:
-        p[0] = p[1] + '\n' + p[5]
+    elif len(p) == 5:
+        p[0] = p[1] + '\n' + p[4]
 
 
 def p_expression_question_type(p):
@@ -88,20 +89,27 @@ def p_expression_question(p):
 
 def p_expression_brace_expr(p):
     """
-    brace_expr : brace_inline_expr
-    brace_expr : brace_multiline_expr
+    brace_expr :
+    brace_expr : OPEN_BRACE CLOSE_BRACE
+    brace_expr : OPEN_BRACE answer CLOSE_BRACE
     """
-    p[0] = p[1]
+    if len(p) == 1:
+        p[0] = ''
+    elif len(p) == 3:
+        p[0] = ''
+    elif len(p) == 4:
+        p[0] = p[2]
 
 
-def p_expression_brace_inline_expr(p):
+def p_expression_answer(p):
     """
-    brace_inline_expr : OPEN_BRACE string CLOSE_BRACE
+    answer : string
     """
-    clean_string = p[2].strip()
+    clean_string = p[1].strip()
 
-    # Is a multiple answer?
-    n = len(''.join(clean_string.split('=')).split('~'))
+    # Is it a multiple answer?
+    pattern = re.compile(r'^[=~]{1}|[^\\][=~]{1}')
+    n = len(re.findall(pattern, clean_string))
     if n > 1:
         res = ''
         pos = 0
@@ -111,39 +119,11 @@ def p_expression_brace_inline_expr(p):
             clean_a = a.strip()
             res = res + str(answers.create_answer(clean_a))
             pos = len(a)
-            copy_string = clean_string[pos:]
+            copy_string = copy_string[pos:]
     else:
-        res = answers.create_answer(p[2].strip())
+        res = answers.create_answer(p[1].strip())
 
     p[0] = '(' + str(res) + ')'
-
-
-def p_expression_brace_multiline_expr(p):
-    """
-    brace_multiline_expr :
-    brace_multiline_expr : OPEN_BRACE NEWLINE answer_expr CLOSE_BRACE
-    """
-    if len(p) == 1:
-        p[0] = ''
-    elif len(p) == 5:
-        p[0] = ' (' + p[3] + ') '
-
-
-def p_expression_answer_expr(p):
-    """
-    answer_expr : 
-    answer_expr : answer_expr answer NEWLINE
-    """
-    if len(p) == 1:
-        p[0] = ''
-    elif len(p) == 4:
-        p[0] = p[1] + ', ' + p[2]
-
-
-def p_expression_answer(p):
-    'answer : string'
-    res = answers.create_answer(p[1].strip())
-    p[0] = str(res)
 
 
 def p_expression_string(p):
@@ -161,13 +141,6 @@ def p_expression_n_nl(p):
     """
     n_nl :
     n_nl : n_nl NEWLINE
-    """
-
-
-def p_expression_1_nl(p):
-    """
-    1_nl :
-    1_nl : NEWLINE
     """
 
 
@@ -201,6 +174,7 @@ with open(args.file, 'r') as myfile:
   #print(s)
   #print()
   
-  result = parser.parse(s)
+  res = preprocessor.preprocess(s)
+  result = parser.parse(res)
   print('AQUÍ VA EL RESULTADO')
   print(result)

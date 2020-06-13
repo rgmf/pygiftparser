@@ -1,0 +1,59 @@
+// Apartado 5. Tecnologías de conexión a Internet
+
+¿En qué tipo de red se utiliza la tecnología WiMax? {
+	=Red MAN
+	~Red 4G
+	~Red WLAN
+	~Red LAN
+	~Red WAN
+}
+
+¿Qué tipo de tecnología de conexión a internet utiliza el cableado de la red de telefonía fija? {
+	=ADSL
+	~WiMax
+	~4G
+	~PLC
+	~Fibra óptica
+}
+
+¿Qué tipo de tecnología de conexión a internet utiliza la red de telefonía móvil? {
+	~ADSL
+	~WiMax
+	=4G
+	~Satélite
+	~Fibra óptica
+}
+
+¿Qué tipo de tecnología de conexión a internet utiliza la red eléctrica para enviar los datos? {
+	~ADSL
+	~WiMax
+	~4G
+	=PLC
+	~Fibra óptica
+}
+
+¿Con qué tipo de fibra óptica el cable de fibra óptica llega hasta el propio router del cliente {
+	~HFC (Hybrid Fiber Coaxial)
+	=FTTH (Fiber To The Home)
+	~Fibra multimodo
+	~Fibra monomodo
+	~En todos los tipos de fibra
+}
+
+¿Con qué tipo de tecnología de conexión a internet se puede alcanzar mayor velocidad de conexión? {
+	=Fibra óptica
+	~ADSL
+	~WiMax
+	~4G
+	~Satélite
+	~Paloma mensajera
+}
+
+¿Qué tipo de conexión a internet sería la más recomendable utilizar en una casa de campo que tenemos en las afueras de un pueblo, a la que no llega el cable de teléfono fijo ni ningún otro tipo de cable de comunicaciones? {
+	=WiMAX
+	~ADSL
+	~Fibra óptica
+	~Satélite
+	~Todas las opciones serían recomendables
+	~Ninguna de las opciones sería posible utilizarla en esta situación
+}

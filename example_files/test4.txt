@@ -1,0 +1,248 @@
+// Redes. Examen Tema 1
+
+
+// Apartado 1, 2. Elementos de un sistema de comunicación
+
+¿Cuál es el elemento por el que se transmite la información en un proceso de comunicación? {
+	=Canal
+	~Código
+	~Ruido
+	~Receptor
+}
+
+¿Cómo se llama el proceso mediante el cual una entidad transmite información a otra? {
+	=%100%comunicación
+	=%60%comunicacion
+}
+
+¿Cómo se llama el elemento de la comunicación que transmite el mensaje? {
+	=%100%emisor
+}
+
+
+¿Qué nombre reciben las interferencias que contaminan el mensaje o el canal en una comunicación? {
+	=%100%ruido
+}
+
+Conjunto de normas que establecen cómo debe llevarse a cabo la comunicación: {
+	~Mensaje
+	~Ruido
+	=Protocolo
+	~Sistema binario
+	~Comunicación
+}
+
+
+
+
+
+// Apartado 3. Representación de números y caracteres
+
+¿Cuál de los siguientes símbolos NO forma parte del sistema de codificación decimal? {
+	~0
+	=10
+	~1
+	~Ninguno
+}
+
+
+¿Cuál es la unidad mínima de información en un sistema informático? {
+	=Bit
+	~Byte
+	~MegaByte
+	~Ninguna de las otras respuestas es correcta
+}
+
+
+¿Cuál sería la representación binaria del número 33? {
+	~101111
+	~100000
+	=100001
+	~111
+}
+
+
+¿Cuál es la representación decimal de la cadena binaria 101? {
+	~2
+	=5
+	~3
+	~7
+}
+
+
+¿Cuál de los siguientes números binarios es mayor? {
+	=101001
+	~100111
+	~100101
+	~11111
+}
+
+
+¿Cuál de estos números es un numero binario? {
+	~5A10
+	~0012
+	=1101
+	~1710
+}
+
+
+¿A qué sistema de numeración pertenece el número 2B5? {
+	~Decimal
+	~Binario
+	~Morse
+	=Hexadecimal
+	~Sexagesimal
+}
+
+
+¿Cuántos símbolos tiene el sistema decimal? {
+	~16 símbolos
+	=10 símbolos
+	~2 símbolos
+	~8 bits
+	~Infinitos números
+}
+
+
+En el sistema de codificación ASCII, ¿cuánto ocupa cada carácter? {
+	=8 bits
+	~1 bit
+	~8 bytes
+	~3,14 bytes
+}
+
+¿Cuántos caracteres diferentes podemos representar utilizando el código ASCII? {
+	=256
+	~1024
+	~100
+	~8
+	~No hay límite de caracteres
+}
+
+
+
+
+// Apartado 4. Seguridad
+¿Cuál es el principal objetivo de la seguridad informática? {
+	=Impedir que otras personas puedan leer la información qué transmitimos
+	~Permitir que todo el mundo pueda acceder a Internet
+	~Permitir que todo el mundo pueda leer la información que enviamos
+	~Asegurar que podemos subir todas nuestras fotos a Instagram
+}
+
+
+Cifrar un mensaje consiste en: {
+	=Transformar el mensaje para que solamente el destinatario pueda entenderlo
+	~Transformar el mensaje para que nadie pueda entenderlo
+	~Transmitir un mensaje seguro por la red
+	~Convertir el mensaje cifrado en el mensaje en claro
+}
+
+
+Descifrar un mensaje consiste en: {
+	=Transformar un mensaje cifrado en un mensaje en claro que pueda entender el receptor
+	~Transmitir un mensaje seguro por la red
+	~Transformar un mensaje para que nadie pueda leerlo
+	~Convertir un mensaje en claro en un mensaje cifrado
+}
+
+
+En el cifrado del Cesar, si utilizamos una clave de cifrado +4, ¿cómo se cifra la letra 'B'? {
+	=F
+	~C
+	~E
+	~G
+}
+
+
+En el cifrado del Cesar, si utilizamos una clave de descifrado -2, ¿cómo se descifra la letra 'G'? {
+	=E
+	~F
+	~H
+	~I
+}
+
+
+
+
+// Apartado 5. Medida de la información
+
+¿Cuál es en informática a la unidad mínima de información? {
+	=%100%bit
+	=%100%el bit
+}
+
+
+¿Cuál de las respuestas está ordenada de menor a mayor? {
+	~bit, KiloByte, Byte
+	=bit, byte, MegaByte
+	~Byte, bit, KiloByte
+	~MegaByte, Terabyte, GigaByte
+}
+
+
+¿Cuál de estas equivalencias es correcta? {
+	~1 bit \= 8 bytes
+	~1 KB \= 1000 bits
+	~1 GB \= 2 000 KB
+	=Ninguna de las otras respuestas es correcta
+}
+
+
+¿Cuál de las siguientes unidades de medida es mayor? {
+	~GB
+	~Gb
+	~MB
+	=TB
+}
+
+
+La fórmula para calcular la velocidad de transferencia es: {
+	=Velocidad \= Tamaño / Tiempo
+	~Velocidad \= Tiempo / Tamaño
+	~Tiempo \= Velocidad / Tamaño
+	~Velocidad \= Espacio / Tiempo
+	~Ninguna de las otras respuestas es correcta
+}
+
+
+¿En qué unidad suele medirse la velocidad de una conexión a internet? {
+	~B/s
+	~Byte/s
+	~KB/s
+	=mb/s
+	~Km/h
+}
+
+
+¿Cuál de las siguientes unidades de medida es mayor? {
+	~GB
+	~Gb
+	~MB
+	=PB
+	~TB
+}
+
+
+¿Cuál de las siguientes afirmaciones sobre el “byte” es correcta? {
+	=Es un conjunto de 8 bits
+	~Es la unidad mínima de información
+	~Equivale a 1024 bits
+	~Equivale a 1024 KB
+}
+
+
+¿Convierte 5MB a Bytes? {
+	=5.000.000 B
+	~5.000 B
+	~0,5 B
+	~0,005 B
+}
+
+
+¿Convierte 20 GB a TB? {
+	=0,02 TB
+	~2 TB
+	~2.000 TB
+	~200 TB
+}

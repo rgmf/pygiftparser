@@ -1,0 +1,33 @@
+// Redes. Examen Tema 1
+
+
+// Apartado 1, 2. Elementos de un sistema de comunicación
+
+¿Cuál es el elemento por el que se transmite la información en un proceso de comunicación? {
+	=Canal
+	~Código
+	~Ruido
+	~Receptor
+}
+
+¿Cómo se llama el proceso mediante el cual una entidad transmite información a otra? {
+	=%100%comunicación
+	=%60%comunicacion
+}
+
+
+¿Cómo se llama el elemento de la comunicación que transmite el mensaje? {
+	=%100%emisor
+}
+
+¿Qué nombre reciben las interferencias que contaminan el mensaje o el canal en una comunicación? {
+	=%100%ruido
+}
+
+Conjunto de normas que establecen cómo debe llevarse a cabo la comunicación {
+	~Mensaje
+	~Ruido
+	=Protocolo
+	~Sistema binario
+	~Comunicación
+}

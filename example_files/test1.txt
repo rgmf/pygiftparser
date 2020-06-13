@@ -1,0 +1,27 @@
+// Redes. Examen Tema 2. Tipos de redes
+
+// Apartado 1. Qué es una red de ordenadores
+
+¿Qué nombre recibe un conjunto de equipos conectados entre sí con el objetivo de intercambiar información y compartir recursos? {
+	=%100%Red de ordenadores
+	=%100%Red de computadores
+	=%100%Red informática
+	=%100%Red
+	=%100%Redes
+}
+
+¿Cuál de los siguientes elementos no se puede compartir en una red de ordenadores {
+	=Corriente eléctrica
+	~Impresora
+	~Disco duro
+	~Conexión a internet
+	~Archivos
+}
+
+Hoy en día es preferible utilizar los ordenadores de forma aislada, para que no sean infectados por virus ni otras amenazas {
+	FALSE
+}
+
+Hoy en día es imprescindible que los ordenadores estén conectados en red para poder compartir información {
+	TRUE
+}

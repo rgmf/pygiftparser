@@ -2,7 +2,7 @@
 
 Una preguna sencilla y sin nada 
 
-Un pregunta senilla y con algo(=resp1 ~resp2 ~resp3 ~resp4)
+Un pregunta senilla y con algo{=resp1 ~resp2 ~resp3 ~resp4}
 
 Una pregunta sencilla y con algo{
 =<p>respuesta 1</p>
