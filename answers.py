@@ -56,7 +56,7 @@ def build_numerical_answer(match):
     return {
         'type': TYPE_NUMERICAL,
         'answer': match.group(1),
-        'error': match.group(3)
+        'error': match.group(5)
     }
 
 
@@ -86,7 +86,7 @@ def create_answer(answer):
     multiple_or_short_patter = re.compile('^[=~](%[0-9]+%)(.+)$')
     short_patter = re.compile('^=.+$')
     multiple_choice_patter = re.compile('^~.+$')
-    numerical_pattern = re.compile('^#([0-9]+(\.[0-9]+){0,1})((:[0-9]+(\.[0-9]+){0,1}){0,1})$')
+    numerical_pattern = re.compile('^#([0-9]+(\.[0-9]+){0,1})((:([0-9]+(\.[0-9]+){0,1})){0,1})$')
 
     match = true_false_pattern.match(answer)
     if match:

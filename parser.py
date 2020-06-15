@@ -23,6 +23,7 @@ tokens = (
 )
 
 # Regular expression rules for simple tokens.
+t_SLASH       = r'/'
 t_COLONCOLON  = r'::'
 t_OPEN_BRACE  = r'{'
 t_CLOSE_BRACE = r'}'
@@ -33,12 +34,6 @@ def t_NEWLINE(t):
     t.lexer.lineno += 1
     return t
 
-#t_ignore = ' \t'
-
-# Ignore comments.
-def t_COMMENT(t):
-    r'^[ \t]*//.*'
-    pass
 
 def t_newline(t):
     r'\n+'
@@ -147,7 +142,7 @@ def p_expression_n_nl(p):
 # Error rule for syntax errors
 def p_error(p):
     if p:
-        print(f"Syntax error at '{p.value}' in line {p.lineno}.")
+        print(f"Syntax error at '{p.value}' in line {p.lineno}. " + str(p))
         raise Exception(f"Syntax error at '{p.value}' in line {p.lineno}.")
     else:
         print('Syntax error at EOI')
@@ -175,6 +170,9 @@ with open(args.file, 'r') as myfile:
   #print()
   
   res = preprocessor.preprocess(s)
+  print('RESULTADO DEL PREPROCESADOR')
+  print(res)
+  print()
   result = parser.parse(res)
   print('AQUÍ VA EL RESULTADO')
   print(result)

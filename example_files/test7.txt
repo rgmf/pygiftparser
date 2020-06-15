@@ -1,0 +1,40 @@
+// Comentario
+
+// que pasa
+
+::Nombre 1::Una pregunta sencilla y con algo:{
+=respuesta1
+~respuesta2
+~respuesta3
+~respuesta4
+}
+
+
+// No debería aparecer
+
+
+Una pregunta sencilla y con algo{
+#4.5:0.5
+}
+
+Una pregunta simple {#5:1}
+
+::nombre 2::Otra más: { #5.01:2 }
+
+¿Qué pasa aquí?
+Ten en cuenta que esto es un número
+así que no respondas mal {
+    #100.01:0.01
+}
+
+
+::Con nombre::Para ir terminando: {#100}
+
+
+
+[html]¿Qué elemento de red representa el siguiente símbolo?
+<br>
+<img width\="200" src\="http://www.newdesignfile.com/postpic/2010/04/cisco-switch-icon_309116.jpg"/>{
+	=%100%Switch
+	=%100%Conmutador
+}
