@@ -11,24 +11,18 @@ import preprocessor
 
 # List of token names.
 tokens = (
-    'SLASH',
     'COLONCOLON',
     'OPEN_BRACE',
     'CLOSE_BRACE',
     'NEWLINE',
-    'SCAPE',
-    'CORRECT',
-    'WRONG',
     'CHAR'
 )
 
 # Regular expression rules for simple tokens.
-t_SLASH       = r'/'
 t_COLONCOLON  = r'::'
 t_OPEN_BRACE  = r'{'
 t_CLOSE_BRACE = r'}'
-t_SCAPE       = r'\\.'
-t_CHAR        = r'[^\{\}\n]' # everything less the other tokens.
+t_CHAR        = r'[^\{\}\n]' # everything but open/close brace and newline.
 def t_NEWLINE(t):
     r'\n'
     t.lexer.lineno += 1
@@ -51,8 +45,8 @@ lexer = lex.lex()
 # Yacc ########################################################################
 
 def p_expression_goal(p):
-    'goal : n_nl gift'
-    p[0] = p[2]
+    'goal : gift'
+    p[0] = p[1]
 
 
 def p_expression_gift(p):
@@ -130,13 +124,6 @@ def p_expression_string(p):
         p[0] = p[1]
     elif len(p) == 3:
         p[0] = p[1] + p[2]
-
-
-def p_expression_n_nl(p):
-    """
-    n_nl :
-    n_nl : n_nl NEWLINE
-    """
 
 
 # Error rule for syntax errors
