@@ -1,0 +1,34 @@
+
+// que pasa
+
+::Nombre 1::Una pregunta sencilla y con algo:{
+=respuesta1
+~respuesta2
+~respuesta3
+~respuesta4
+}
+
+::Primer matching:: Esta pregunta es para emparejar {
+    =uno -> 1
+    =dos -> 2
+    =tres -> 3
+    =cuatro -> 4
+}
+
+
+Esta pregunta parece un emparejar pero no lo es emparejar {
+    =uno -> 1
+    ~dos -> 2
+    ~tres -> 3
+    ~cuatro -> 4
+}
+
+Moodle costs {~lots of money =nothing ~a small amount} to download from moodle.org.
+
+// Con varias líneas
+// No veas que guapo
+Mahatma Gandhi's birthday is an Indian holiday on  {
+~15th
+~3rd
+=2nd
+} of October.

@@ -9,6 +9,7 @@ TYPE_MISSING_WORD = 'missing-word'
 TYPE_NUMERICAL = 'numerical'
 TYPE_ESSAY = 'essay'
 TYPE_DESCRIPTION = 'description'
+TYPE_MATCHING = 'matching'
 
 
 def build_true_false_answer(match):
@@ -60,6 +61,19 @@ def build_numerical_answer(match):
     }
 
 
+def build_matching_answer(match):
+    pair1 = match.group(1).strip()
+    pair2 = match.group(2).strip()
+    if not pair1 or not pair2:
+        return None
+
+    return {
+        'type': TYPE_MATCHING,
+        'pair1': pair1,
+        'pair2': pair2
+    }
+
+
 def idx_first(s, c1, c2):
     posc1 = s.find('=')
     posc2 = s.find('~')
@@ -83,6 +97,7 @@ def get_first_answer(s):
 
 def create_answer(answer):
     true_false_pattern = re.compile('^TRUE$|^FALSE$|^T$|^F$|^true$|^false$|^t$|^f$')
+    matching_pattern = re.compile('^=(.+)->(.+$)')
     multiple_or_short_patter = re.compile('^[=~](%[0-9]+%)(.+)$')
     short_patter = re.compile('^=.+$')
     multiple_choice_patter = re.compile('^~.+$')
@@ -91,6 +106,10 @@ def create_answer(answer):
     match = true_false_pattern.match(answer)
     if match:
         return build_true_false_answer(match)
+
+    match = matching_pattern.match(answer)
+    if match:
+        return build_matching_answer(match)
 
     match = multiple_or_short_patter.match(answer)
     if match:

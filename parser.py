@@ -80,14 +80,25 @@ def p_expression_brace_expr(p):
     """
     brace_expr :
     brace_expr : OPEN_BRACE CLOSE_BRACE
-    brace_expr : OPEN_BRACE answer CLOSE_BRACE
+    brace_expr : OPEN_BRACE answer CLOSE_BRACE question_continue
     """
     if len(p) == 1:
         p[0] = ''
     elif len(p) == 3:
         p[0] = ''
-    elif len(p) == 4:
-        p[0] = p[2]
+    elif len(p) == 5:
+        p[0] = 'MISSING_WORD(' + p[2] + ') ' + p[4]
+
+
+def p_expression_question_continue(p):
+    """
+    question_continue :
+    question_continue : string
+    """
+    if len(p) == 1:
+        p[0] = ''
+    elif len(p) == 2:
+        p[0] = p[1]
 
 
 def p_expression_answer(p):
@@ -102,13 +113,12 @@ def p_expression_answer(p):
     if n > 1:
         res = ''
         pos = 0
-        copy_string = clean_string
         for i in range(n):
-            a = answers.get_first_answer(copy_string)
-            clean_a = a.strip()
-            res = res + str(answers.create_answer(clean_a))
-            pos = len(a)
-            copy_string = copy_string[pos:]
+            answer = answers.get_first_answer(clean_string)
+            clean_answer = answer.strip()
+            res = res + str(answers.create_answer(clean_answer))
+            pos = len(answer)
+            clean_string = clean_string[pos:]
     else:
         res = answers.create_answer(p[1].strip())
 
