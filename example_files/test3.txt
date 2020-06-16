@@ -2,6 +2,8 @@
 
 Una preguna sencilla y sin nada 
 
+Una pregunta sencilla y sin nada {}
+
 Un pregunta senilla y con algo{=resp1 ~resp2 ~resp3 ~resp4}
 
 Una pregunta sencilla y con algo{

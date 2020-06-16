@@ -6,6 +6,7 @@ def preprocess(s):
     clean_s = ''
     for line in s.split('\n'):
         line = line.strip()
+        # Change double colon surrending name questions by {{ and }}.
         if re.search(r'^::.*::.*$', line):
             line = re.sub(r'::', '}}', re.sub(r'::', '{{', line, 1), 1)
 
