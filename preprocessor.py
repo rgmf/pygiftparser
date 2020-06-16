@@ -5,7 +5,11 @@ def preprocess(s):
     # Removes comments and clean extra lines below and under the string.
     clean_s = ''
     for line in s.split('\n'):
-        if not re.search(r'^[ \t]*//.*$', line):
+        line = line.strip()
+        if re.search(r'^::.*::.*$', line):
+            line = re.sub(r'::', '}}', re.sub(r'::', '{{', line, 1), 1)
+
+        if not re.search(r'^//.*$', line):
             clean_s = clean_s + line + '\n'
     clean_s = clean_s.strip()
 

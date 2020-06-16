@@ -8,15 +8,15 @@
 ~respuesta4
 }
 
-::Primer matching:: Esta pregunta es para emparejar {
-    =uno -> 1
+        ::Primer matching:: Esta [pregunta] es para emparejar:: {
+    =uno:o_dos -> 1
     =dos -> 2
     =tres -> 3
     =cuatro -> 4
 }
 
 
-Esta pregunta parece un emparejar pero no lo es emparejar {
+       Esta pregunta parece un emparejar pero no lo es emparejar {
     =uno -> 1
     ~dos -> 2
     ~tres -> 3

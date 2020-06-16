@@ -15,8 +15,7 @@ TYPE_MATCHING = 'matching'
 def build_true_false_answer(match):
     return {
         'type': TYPE_TRUE_FALSE,
-        'answer': match.string,
-        'percentage': '100'
+        'answer': match.string
     }
 
 

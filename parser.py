@@ -5,6 +5,10 @@ import ply.yacc as yacc
 
 import answers
 import preprocessor
+import gift
+
+
+gift_result = gift.Gift()
 
 
 # Lex #########################################################################
@@ -15,7 +19,8 @@ tokens = (
     'OPEN_BRACE',
     'CLOSE_BRACE',
     'NEWLINE',
-    'CHAR'
+    'CHAR',
+    'STRING'
 )
 
 # Regular expression rules for simple tokens.
@@ -62,18 +67,26 @@ def p_expression_gift(p):
 
 def p_expression_question_type(p):
     """
-    question_type : COLONCOLON string COLONCOLON question
+    question_type : OPEN_BRACE OPEN_BRACE string CLOSE_BRACE CLOSE_BRACE question
     question_type : question
     """
     if len(p) == 2:
         p[0] = p[1]
-    elif len(p) == 5:
-        p[0] = p[2] + ': ' + p[4]
+        question = gift_result.questions[-1]
+        question.name = question.text
+    elif len(p) == 7:
+        p[0] = p[3].strip() + ': ' + p[6]
+        question = gift_result.questions[-1]
+        question.name = p[3].strip()
 
 
 def p_expression_question(p):
     'question : string brace_expr'
-    p[0] = p[1] + p[2]
+    p[0] = p[1].strip() + p[2]
+
+    question = gift.Question()
+    question.text = p[1].strip()
+    gift_result.add(question)
 
 
 def p_expression_brace_expr(p):
@@ -87,7 +100,7 @@ def p_expression_brace_expr(p):
     elif len(p) == 3:
         p[0] = ''
     elif len(p) == 5:
-        p[0] = 'MISSING_WORD(' + p[2] + ') ' + p[4]
+        p[0] = p[2] + p[4]
 
 
 def p_expression_question_continue(p):
@@ -98,13 +111,11 @@ def p_expression_question_continue(p):
     if len(p) == 1:
         p[0] = ''
     elif len(p) == 2:
-        p[0] = p[1]
+        p[0] = ' MISSING_WORD_CONTINUE(' + p[1].strip() + ')'
 
 
 def p_expression_answer(p):
-    """
-    answer : string
-    """
+    'answer : string'
     clean_string = p[1].strip()
 
     # Is it a multiple answer?
@@ -161,15 +172,22 @@ def parse_input_arguments():
 
 args = parse_input_arguments()
 with open(args.file, 'r') as myfile:
-  s = myfile.read()
-  #print('FICHERO')
-  #print(s)
-  #print()
+    s = myfile.read()
+    #print('FICHERO')
+    #print(s)
+    #print()
   
-  res = preprocessor.preprocess(s)
-  print('RESULTADO DEL PREPROCESADOR')
-  print(res)
-  print()
-  result = parser.parse(res)
-  print('AQUÍ VA EL RESULTADO')
-  print(result)
+    res = preprocessor.preprocess(s)
+    print('RESULTADO DEL PREPROCESADOR')
+    print(res)
+    print()
+    result = parser.parse(res)
+    print('AQUÍ VA EL RESULTADO DEL PARSER')
+    print(result)
+
+
+    print()
+    print()
+    print('AQUÍ EL OBJETO')
+    for q in gift_result.questions:
+        print(q.name + ': ' + q.text)
