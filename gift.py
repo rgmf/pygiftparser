@@ -44,8 +44,14 @@ class AnswerFactory(object):
         if Numerical.is_answer(options):
             return Numerical(options, raw_answer=raw_answer)
 
-        if MultipleChoice.is_answer(options):
-            return MultipleChoice(options, raw_answer=raw_answer)
+        if NumericalRange.is_answer(options):
+            return NumericalRange(options, raw_answer=raw_answer)
+
+        if MultipleChoiceRadio.is_answer(options):
+            return MultipleChoiceRadio(options, raw_answer=raw_answer)
+
+        if MultipleChoiceCheckbox.is_answer(options):
+            return MultipleChoiceCheckbox(options, raw_answer=raw_answer)
 
         if Essay.is_answer(options):
             return Essay(options, raw_answer=raw_answer)
@@ -117,7 +123,7 @@ class Answer(ABC):
 
 
 class Essay(Answer):
-    PATTERN = re.compile('^\{\}$')
+    PATTERN = re.compile(r'^\{\}$')
 
     def __init__(self, options: list, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -143,7 +149,7 @@ class Essay(Answer):
 
 
 class Description(Answer):
-    PATTERN = re.compile('^$')
+    PATTERN = re.compile(r'^$')
 
     def __init__(self, options: list, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -169,9 +175,9 @@ class Description(Answer):
 
 
 class TrueFalse(Answer):
-    PATTERN = re.compile('^TRUE$|^FALSE$|^T$|^F$|^true$|^false$|^t$|^f$')
-    TRUE_PATTERN = re.compile('^TRUE$|^T$|^true$|^t$')
-    FALSE_PATTERN = re.compile('^FALSE$|^F$|^false$|^f$')
+    PATTERN = re.compile(r'^TRUE$|^FALSE$|^T$|^F$|^true$|^false$|^t$|^f$')
+    TRUE_PATTERN = re.compile(r'^TRUE$|^T$|^true$|^t$')
+    FALSE_PATTERN = re.compile(r'^FALSE$|^F$|^false$|^f$')
 
     def __init__(self, options: list, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -201,10 +207,10 @@ class TrueFalse(Answer):
         return TrueFalse.PATTERN
 
 
-class MultipleChoice(Answer):
-    PATTERN = re.compile('^=(%[0-9]+%){0,1}(.+)$|^~.+$')
-    VALID_PATTERN = re.compile('^=(%[0-9]+%){0,1}(.+)$')
-    ERROR_PATTERN = re.compile('^~.+$')
+class MultipleChoiceRadio(Answer):
+    PATTERN = re.compile(r'^=(%[0-9]+%){0,1}(.+)$|^~.+$')
+    VALID_PATTERN = re.compile(r'^=(%[0-9]+%){0,1}(.+)$')
+    ERROR_PATTERN = re.compile(r'^~.+$')
 
     def __init__(self, options, *args, **kwargs):
         """
@@ -223,7 +229,7 @@ class MultipleChoice(Answer):
 
 
     def __repr__(self):
-        return 'MultipleChoice()'
+        return 'MultipleChoiceRadio()'
 
 
     def __str__(self):
@@ -234,18 +240,58 @@ class MultipleChoice(Answer):
     @staticmethod
     def is_answer(options: list) -> bool:
         total = len(options)
-        valid = len(list(filter(lambda x: MultipleChoice.VALID_PATTERN.match(x), options)))
-        error = len(list(filter(lambda x: MultipleChoice.ERROR_PATTERN.match(x), options)))
+        valid = len(list(filter(lambda x: MultipleChoiceRadio.VALID_PATTERN.match(x), options)))
+        error = len(list(filter(lambda x: MultipleChoiceRadio.ERROR_PATTERN.match(x), options)))
         return total > 0 and total == (valid + error) and valid == 1
 
 
     @staticmethod
     def get_pattern() -> re.Pattern:
-        return MultipleChoice.PATTERN
+        return MultipleChoiceRadio.PATTERN
+
+
+class MultipleChoiceCheckbox(Answer):
+    PATTERN = re.compile(r'^~(%(-{0,1}[0-9]+)%)(.+)$')
+
+    def __init__(self, options, *args, **kwargs):
+        """
+        :array options: array with all options.
+        """
+        super().__init__(*args, **kwargs)
+        self.answer = list(
+            map(lambda opt: 
+                {
+                    'text': self.PATTERN.match(opt).group(3),
+                    'percentage': int(self.PATTERN.match(opt).group(2)) / 100
+                },
+                options
+            )
+        )
+
+
+    def __repr__(self):
+        return 'MultipleChoiceCheckbox()'
+
+
+    def __str__(self):
+        a = [ i['text'] + '(' + str(i['percentage'] * 100) + '%)' for i in self.answer ]
+        return '\n'.join(a)
+
+
+    @staticmethod
+    def is_answer(options: list) -> bool:
+        total = len(options)
+        count = len(list(filter(lambda x: MultipleChoiceCheckbox.PATTERN.match(x), options)))
+        return total > 0 and total == count
+
+
+    @staticmethod
+    def get_pattern() -> re.Pattern:
+        return MultipleChoiceCheckbox.PATTERN
 
 
 class Short(Answer):
-    PATTERN = re.compile('^=(%([0-9]+)%){0,1}(.+)$')
+    PATTERN = re.compile(r'^=(%([0-9]+)%){0,1}(.+)$')
 
     def __init__(self, options, *args, **kwargs):
         """
@@ -288,7 +334,7 @@ class Short(Answer):
 
 
 class Numerical(Answer):
-    PATTERN = re.compile('^#([0-9]+(\.[0-9]+){0,1})((:([0-9]+(\.[0-9]+){0,1})){0,1})$')
+    PATTERN = re.compile(r'^#([0-9]+(\.[0-9]+){0,1})((:([0-9]+(\.[0-9]+){0,1})){0,1})$')
 
     def __init__(self, options: list, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -313,10 +359,7 @@ class Numerical(Answer):
 
     @staticmethod
     def is_answer(options: list) -> bool:
-        if len(options) == 1 and Numerical.PATTERN.match(options[0]):
-            return True
-        else:
-            return False
+        return len(options) == 1 and Numerical.PATTERN.match(options[0])
 
 
     @staticmethod
@@ -324,8 +367,35 @@ class Numerical(Answer):
         return Numerical.PATTERN
 
 
+class NumericalRange(Answer):
+    PATTERN = re.compile(r'^#([0-9]+(\.[0-9]+){0,1})\.\.([0-9]+(\.[0-9]+){0,1})')
+
+    def __init__(self, options: list, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        match = self.PATTERN.match(options[0])
+        self.answer = {'from': match.group(1), 'to': match.group(3)}
+
+
+    def __repr__(self):
+        return 'NumericalRange()'
+
+
+    def __str__(self):
+        return self.answer['from'] + ' .. ' + self.answer['to']
+
+
+    @staticmethod
+    def is_answer(options: list) -> bool:
+        return len(options) == 1 and NumericalRange.PATTERN.match(options[0])
+
+
+    @staticmethod
+    def get_pattern() -> re.Pattern:
+        return NumericalRange.PATTERN
+
+
 class Matching(Answer):
-    PATTERN = re.compile('^=(.+)->(.+$)')
+    PATTERN = re.compile(r'^=(.+)->(.+$)')
 
     def __init__(self, options, *args, **kwargs):
         super().__init__(*args, **kwargs)
