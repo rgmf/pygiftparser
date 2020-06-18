@@ -109,8 +109,19 @@ class AnswerFactory(object):
 
 class Answer(ABC):
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, options: list, *args, **kwargs):
+        # Raw answer like was in gift file between braces.
         self.raw_answer = kwargs.get('raw_answer', None)
+
+        # Catch feedback from every answer (can be None).
+        self.feedback = []
+        for idx, val in enumerate(options):
+            pos = val.find('#')
+            if pos > 0 and val[pos - 1] != '\\':
+                self.feedback.append(val[pos + 1:].strip())
+                options[idx] = options[idx][:pos].strip()
+            else:
+                self.feedback.append(None)
 
 
     @staticmethod
@@ -129,7 +140,7 @@ class Essay(Answer):
     PATTERN = re.compile(r'^\{\}$')
 
     def __init__(self, options: list, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(options, options, *args, **kwargs)
         self.answer = ''
 
 
@@ -155,7 +166,7 @@ class Description(Answer):
     PATTERN = re.compile(r'^$')
 
     def __init__(self, options: list, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(options, options, *args, **kwargs)
         self.answer = ''
 
 
@@ -178,12 +189,23 @@ class Description(Answer):
 
 
 class TrueFalse(Answer):
-    PATTERN = re.compile(r'^TRUE$|^FALSE$|^T$|^F$|^true$|^false$|^t$|^f$')
+    PATTERN = re.compile(r'^TRUE(#.+){0,1}$|^FALSE(#.+){0,1}$|^T(#.+){0,1}$|^F(#.+){0,1}$|^true(#.+){0,1}$|^false(#.+){0,1}$|^t(#.+){0,1}$|^f(#.+){0,1}$')
     TRUE_PATTERN = re.compile(r'^TRUE$|^T$|^true$|^t$')
     FALSE_PATTERN = re.compile(r'^FALSE$|^F$|^false$|^f$')
 
     def __init__(self, options: list, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(options, *args, **kwargs)
+
+        # True-False answers can have two feedback. It looks for the second 
+        # one in the current feedback text.
+        if len(self.feedback) == 1 and self.feedback[0]:
+            pos = self.feedback[0].find('#')
+            val = self.feedback[0]
+            if pos > 0 and val[pos - 1] != '\\':
+                self.feedback.append(val[pos + 1:].strip())
+                self.feedback[0] = val[:pos].strip()
+
+        # The answer can be True or False.
         self.answer = False
         if self.TRUE_PATTERN.match(options[0]):
             self.answer = True
@@ -219,7 +241,7 @@ class MultipleChoiceRadio(Answer):
         """
         :array options: array with all options.
         """
-        super().__init__(*args, **kwargs)
+        super().__init__(options, *args, **kwargs)
         self.answer = list(
             map(lambda opt: 
                 {
@@ -260,7 +282,7 @@ class MultipleChoiceCheckbox(Answer):
         """
         :array options: array with all options.
         """
-        super().__init__(*args, **kwargs)
+        super().__init__(options, *args, **kwargs)
         self.answer = list(
             map(lambda opt: 
                 {
@@ -300,7 +322,7 @@ class Short(Answer):
         """
         :array options: array with all valid options.
         """
-        super().__init__(*args, **kwargs)
+        super().__init__(options, *args, **kwargs)
         self.answer = []
 
         # Extract first character for all options (the '=').
@@ -340,7 +362,7 @@ class Numerical(Answer):
     PATTERN = re.compile(r'^#([0-9]+(\.[0-9]+){0,1})((:([0-9]+(\.[0-9]+){0,1})){0,1})$')
 
     def __init__(self, options: list, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(options, *args, **kwargs)
         self.answer = {}
         match = self.PATTERN.match(options[0])
         if match.group(3):
@@ -381,7 +403,7 @@ class NumericalMultiple(Answer):
     MODE_RANGE = 'mode-range'
 
     def __init__(self, options: list, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(options, *args, **kwargs)
         self.answer = []
         num_options = NumericalMultiple.build_options(options[0]) if len(options) == 1 else []
         for i in num_options:
@@ -460,7 +482,7 @@ class NumericalRange(Answer):
     PATTERN = re.compile(r'^#([0-9]+(\.[0-9]+){0,1})\.\.([0-9]+(\.[0-9]+){0,1})')
 
     def __init__(self, options: list, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(options, *args, **kwargs)
         match = self.PATTERN.match(options[0])
         self.answer = {'from': match.group(1), 'to': match.group(3)}
 
@@ -487,7 +509,7 @@ class Matching(Answer):
     PATTERN = re.compile(r'^=(.+)->(.+$)')
 
     def __init__(self, options, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+        super().__init__(options, *args, **kwargs)
         self.answer = []
         for opt in options:
             match = self.PATTERN.match(opt)
