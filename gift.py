@@ -44,6 +44,9 @@ class AnswerFactory(object):
         if Numerical.is_answer(options):
             return Numerical(options, raw_answer=raw_answer)
 
+        if NumericalMultiple.is_answer(options):
+            return NumericalMultiple(options, raw_answer=raw_answer)
+
         if NumericalRange.is_answer(options):
             return NumericalRange(options, raw_answer=raw_answer)
 
@@ -86,7 +89,7 @@ class AnswerFactory(object):
         pattern = re.compile(r'^[=~]{1}|[^\\][=~]{1}')
         n = len(re.findall(pattern, raw_answer))
         if (raw_answer[0] != '=' and raw_answer[0] != '~'):
-            if n > 0:
+            if n > 0 and raw_answer[0] != '#':
                 raise Exception('AnswerFactory._build_options: Syntax error: malformed answer: "' + raw_answer + '"')
             return [raw_answer]
         else:
@@ -220,7 +223,7 @@ class MultipleChoiceRadio(Answer):
         self.answer = list(
             map(lambda opt: 
                 {
-                    'text': opt[1:],
+                    'text': opt[1:].strip(),
                     'percentage': 1 if opt[0] == '=' else 0
                 },
                 options
@@ -233,7 +236,7 @@ class MultipleChoiceRadio(Answer):
 
 
     def __str__(self):
-        a = [ i['text'] + '(' + str(i['percentage'] * 100) + '%)' for i in self.answer ]
+        a = [ i['text'] + ' (' + str(i['percentage'] * 100) + '%)' for i in self.answer ]
         return '\n'.join(a)
 
 
@@ -354,7 +357,7 @@ class Numerical(Answer):
 
 
     def __str__(self):
-        return self.answer['number'] + '(+-' + self.answer['error'] + ')'
+        return str(self.answer['number']) + ' (+-' + str(self.answer['error']) + ')'
 
 
     @staticmethod
@@ -365,6 +368,92 @@ class Numerical(Answer):
     @staticmethod
     def get_pattern() -> re.Pattern:
         return Numerical.PATTERN
+
+
+class NumericalMultiple(Answer):
+    NUM_PATTERN              = re.compile(r'^=([0-9]+(\.[0-9]+){0,1})((:([0-9]+(\.[0-9]+){0,1})){0,1})$')
+    NUM_PERCENTAGE_PATTERN   = re.compile(r'^=(%([0-9]+)%){1}([0-9]+(\.[0-9]+){0,1})((:([0-9]+(\.[0-9]+){0,1})){0,1})$')
+    RANGE_PATTERN            = re.compile(r'^=([0-9]+(\.[0-9]+){0,1})\.\.([0-9]+(\.[0-9]+){0,1})')
+    RANGE_PERCENTAGE_PATTERN = re.compile(r'^=(%([0-9]+)%){1}([0-9]+(\.[0-9]+){0,1})\.\.([0-9]+(\.[0-9]+){0,1})')
+    PATTERN = re.compile(r'^=([0-9]+(\.[0-9]+){0,1})((:([0-9]+(\.[0-9]+){0,1})){0,1})$|^=(%([0-9]+)%){1}([0-9]+(\.[0-9]+){0,1})((:([0-9]+(\.[0-9]+){0,1})){0,1})$|^=([0-9]+(\.[0-9]+){0,1})\.\.([0-9]+(\.[0-9]+){0,1})|^=(%([0-9]+)%){1}([0-9]+(\.[0-9]+){0,1})\.\.([0-9]+(\.[0-9]+){0,1})')
+
+    MODE_NUM = 'mode-num'
+    MODE_RANGE = 'mode-range'
+
+    def __init__(self, options: list, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.answer = []
+        num_options = NumericalMultiple.build_options(options[0]) if len(options) == 1 else []
+        for i in num_options:
+            if self.NUM_PATTERN.match(i):
+                match = self.NUM_PATTERN.match(i)
+                a = {
+                    'mode': self.MODE_NUM,
+                    'number': float(match.group(1)),
+                    'error': float(match.group(5)),
+                    'percentage': 1
+                }
+            elif self.NUM_PERCENTAGE_PATTERN.match(i):
+                match = self.NUM_PERCENTAGE_PATTERN.match(i)
+                a = {
+                    'mode': self.MODE_NUM,
+                    'number': float(match.group(3)),
+                    'error': float(match.group(7)),
+                    'percentage': float(match.group(2)) / 100
+                }
+            elif self.RANGE_PATTERN.match(i):
+                match = self.RANGE_PATTERN.match(i)
+                a = {
+                    'mode': self.MODE_RANGE,
+                    'from': float(match.group(1)),
+                    'to': float(match.group(3)),
+                    'percentage': 1
+                }
+            elif self.RANGE_PERCENTAGE_PATTERN.match(i):
+                match = self.RANGE_PERCENTAGE_PATTERN.match(i)
+                a = {
+                    'mode': self.MODE_RANGE,
+                    'from': float(match.group(3)),
+                    'to': float(match.group(5)),
+                    'percentage': float(match.group(2)) / 100
+                }
+            else:
+                raise Exception('NumericalMultiple.__init__: syntax error: answer number: ' + i + ' not valid')
+
+            self.answer.append(a)
+
+
+    def __repr__(self):
+        return 'NumericalMultiple()'
+
+
+    def __str__(self):
+        return '\n'.join([ str(numerical) for numerical in self.answer ])
+
+
+    @staticmethod
+    def build_options(answer: str) -> bool:
+        if answer[0] == '#':
+            answer = answer[1:].strip()
+            if answer[0] == '=':
+                res = [ '=' + a.strip() for a in answer.split('=')[1:] ]
+                return res
+        return []
+
+
+    @staticmethod
+    def is_answer(options: list) -> bool:
+        if len(options) == 1:
+            num_options = NumericalMultiple.build_options(options[0])
+            total = len(num_options)
+            count = len(list(filter(lambda x: NumericalMultiple.PATTERN.match(x), num_options)))
+            return total > 1 and total == count
+        return False
+
+
+    @staticmethod
+    def get_pattern() -> re.Pattern:
+        return NumericalMultiple.PATTERN
 
 
 class NumericalRange(Answer):
@@ -391,7 +480,7 @@ class NumericalRange(Answer):
 
     @staticmethod
     def get_pattern() -> re.Pattern:
-        return NumericalRange.PATTERN
+        return NumericaRange.PATTERN
 
 
 class Matching(Answer):
@@ -403,17 +492,17 @@ class Matching(Answer):
         for opt in options:
             match = self.PATTERN.match(opt)
             self.answer.append({
-                'pair1': match.group(1),
-                'pair2': match.group(2)
+                'pair1': match.group(1).strip(),
+                'pair2': match.group(2).strip()
             })
 
 
     def __repr__(self):
-        return 'Short()'
+        return 'Matching()'
 
 
     def __str__(self):
-        a = [ i['pair1'] + ' -> ' + i['pari2'] for i in self.answer ]
+        a = [ i['pair1'] + ' -> ' + i['pair2'] for i in self.answer ]
         return '\n'.join(a)
 
 

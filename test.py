@@ -15,7 +15,10 @@ with open(args.file, 'r') as myfile:
     s = myfile.read()
     result = parser.parse(s)
     for q in result.questions:
-        print('QUESTION: ' + q.name)
+        if q.text_continue:
+            print('QUESTION: ' + q.text + ' _____ ' + q.text_continue)
+        else:
+            print('QUESTION: ' + q.text)
         print('TYPE: ' + q.answer.__repr__())
         print(q.text)
         print(q.answer)
