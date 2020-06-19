@@ -14,19 +14,19 @@ gift_result = gift.Gift()
 
 # List of token names.
 tokens = (
-    'COLONCOLON',
     'OPEN_BRACE',
     'CLOSE_BRACE',
     'NEWLINE',
     'CHAR',
-    'STRING'
+    'SCAPE'
 )
 
 # Regular expression rules for simple tokens.
-t_COLONCOLON  = r'::'
 t_OPEN_BRACE  = r'{'
 t_CLOSE_BRACE = r'}'
-t_CHAR        = r'[^\{\}\n]' # everything but open/close brace and newline.
+t_SCAPE       = r'\\'
+t_CHAR        = r'[^\\\{\}\n]'
+#t_CHAR        = r'(\\\\|\\\[|\\\]|\\\,|[^,\\\[\]])'
 def t_NEWLINE(t):
     r'\n'
     t.lexer.lineno += 1
@@ -38,7 +38,7 @@ def t_newline(t):
     t.lexer.lineno += len(t.value)
     t.lexer.linestart = t.lexer.lexpos
 
-# Error.
+
 def t_error(t):
     print(f"Illegal character '{t.value[0]}' at line {t.lineno}")
     t.lexer.skip(1)
@@ -120,18 +120,24 @@ def p_expression_string(p):
     """
     string : string CHAR
     string : CHAR
+    string : string SCAPE CHAR
+    string : string SCAPE OPEN_BRACE
+    string : string SCAPE CLOSE_BRACE
+    string : string SCAPE SCAPE
     """
     if len(p) == 2:
         p[0] = p[1]
     elif len(p) == 3:
         p[0] = p[1] + p[2]
+    elif len(p) == 4:
+        p[0] = p[1] + p[2] + p[3]
 
 
 # Error rule for syntax errors
 def p_error(p):
     if p:
-        print(f"Syntax error at '{p.value}' in line {p.lineno}. " + str(p))
-        raise Exception(f"Syntax error at '{p.value}' in line {p.lineno}.")
+        print(f"Syntax error at '{p.value}' in question number {len(gift_result.questions) + 1}. " + str(p))
+        raise Exception(f"Syntax error at '{p.value}' in question number {len(gift_result.questions) + 1}.")
     else:
         print('Syntax error at EOI')
         raise Exception('Syntax error at EOI: ')
