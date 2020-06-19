@@ -1,0 +1,19 @@
+What two people are entombed in Grant's tomb? {
+   ~%-100%No one
+   ~%50%Grant # feedback answer 2
+   ~%50%Grant's wife
+   ~%-100%Grant's father # feedback answer 4
+}
+
+Con carácter de escape \{a ver si va\} porque... en fin {
+    #100:1
+}
+
+::más caracteres::de escape \{ TRUE \} {FALSE}
+
+Es 4\=cuatro {T}
+
+Varias líneas {
+    ~\~\~\~\#\\
+    =\=\=\=\#\\
+}
