@@ -1,5 +1,5 @@
-import parser
 import argparse
+import parser
 
 
 def parse_input_arguments():
@@ -15,12 +15,4 @@ with open(args.file, 'r') as myfile:
     s = myfile.read()
     result = parser.parse(s)
     for q in result.questions:
-        print('QUESTION: ' + q.name)
-        print('TYPE: ' + q.answer.__repr__())
-        print('FEEDBACK: ' + str(q.answer.feedback))
-        if q.text_continue:
-            print(q.text + ' _____ ' + q.text_continue)
-        else:
-            print(q.text)
-        print(q.answer)
-        print()
+        print(q)
