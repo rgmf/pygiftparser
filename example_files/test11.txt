@@ -1,0 +1,15 @@
+Con carácter de escape \{a ver si va\} porque... en fin {
+    #100:1
+}
+
+[html]esta es una cuestión, ¿por qué va mal? {=no se sabe =sí se sabe}
+
+::más caracteres::de escape \{ TRUE \} {FALSE}
+
+[html]¿Qué elemento de red representa el siguiente símbolo? A ver
+<br>
+<img width\="200" src\="http://www.newdesignfile.com/postpic/2010/04/cisco-switch-icon_309116.jpg"/>
+{
+	=%100%Switch
+	=%100%Conmutador
+}

@@ -23,3 +23,7 @@ Varias líneas {
 Completa \= con esto \{ a ver que tal \} {=uno =dos} veremos \= como sale \{ \}.
 
 Esta es una description=Descripción \{ veremos \} no se
+
+Con continuacion \{ a ver qué tal \} {=sí =no} veremos \{ como \} va { =no =si}
+
+Con continuacion \{ a ver qué tal \} {=sí =no} veremos \{ como \} va.
