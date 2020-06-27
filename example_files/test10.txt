@@ -5,15 +5,21 @@ What two people are entombed in Grant's tomb? {
    ~%-100%Grant's father # feedback answer 4
 }
 
+Con el símbolo del = le da = vamos y con el # también son las llaves solo { =sí }
+
 Con carácter de escape \{a ver si va\} porque... en fin {
     #100:1
 }
 
 ::más caracteres::de escape \{ TRUE \} {FALSE}
 
-Es 4\=cuatro {T}
+Es 4=cuatro {T}
 
 Varias líneas {
     ~\~\~\~\#\\
     =\=\=\=\#\\
 }
+
+Completa \= con esto \{ a ver que tal \} {=uno =dos} veremos \= como sale \{ \}.
+
+Esta es una description=Descripción \{ veremos \} no se
