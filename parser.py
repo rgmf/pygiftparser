@@ -52,12 +52,12 @@ def t_error(t):
 lexer = lex.lex()
 
 # To test lexer.
-lexer.input('You can use your pencil and paper for these next math questions.')
-while True:
-    tok = lexer.token()
-    if not tok: 
-        break      # No more input
-    print(tok)
+# lexer.input('You can use your pencil and paper for these next math questions.')
+# while True:
+#     tok = lexer.token()
+#     if not tok: 
+#         break      # No more input
+#     print(tok)
 
 
 # Yacc #######################################################################
