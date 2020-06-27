@@ -1,5 +1,4 @@
 import argparse
-import re
 from ply import lex
 import ply.yacc as yacc
 
@@ -14,133 +13,172 @@ gift_result = gift.Gift()
 
 # List of token names.
 tokens = (
-    'OPEN_BRACE',
-    'CLOSE_BRACE',
-    'NEWLINE',
-    'CHAR',
-    'SCAPE'
+    'QUESTION',
+    'QUESTIOND',
+    'QUESTIONC',
+    'OPTION',
+    'FEEDBACK',
+    'TRUE',
+    'FALSE',
+    'NUMERICAL',
+    'RANGE',
+    'MNUMERICAL',
+    'LBRACKET',
+    'RBRACKET'
 )
 
-# Regular expression rules for simple tokens.
-t_OPEN_BRACE  = r'{'
-t_CLOSE_BRACE = r'}'
-t_SCAPE       = r'\\'
-t_CHAR        = r'[^\\\{\}\n]'
-#t_CHAR        = r'(\\\\|\\\[|\\\]|\\\,|[^,\\\[\]])'
-def t_NEWLINE(t):
-    r'\n'
-    t.lexer.lineno += 1
-    return t
-
+t_QUESTION   = r'.+?(?={)'
+t_QUESTIOND  = r'[^{}]+(?=[\n])|[^{}]+$'
+t_QUESTIONC  = r'}.+(?=[\n])|}.+$'
+t_OPTION     = r'[ \t]*[=~].+?(?=[\=~\#\}])'
+t_FEEDBACK   = r'[ \t]*\#.*?(?=[\=~\}])'
+t_TRUE       = r'[ \t]*\|TRUE[ \t]*'
+t_FALSE      = r'[ \t]*\|FALSE[ \t]*'
+t_NUMERICAL  = r'[ \t]*\#[+-]?((\d+(\.\d*)?)|(\.\d+))(:[+-]?((\d+(\.\d*)?)|(\.\d+)))?[ \t]*(?=[\#\}])'
+t_RANGE      = r'[ \t]*\#[+-]?\d+(\.\d+)?(:\d+(\.\d+)?)?\.\.[+-]?\d+(\.\d+)?(:\d+(\.\d+)?)?[ \t]*(?=[\#\}])'
+t_MNUMERICAL = r'[ \t]*{[ \t]*\#[ \t]*(?=[=])'
+t_LBRACKET   = r'{'
+t_RBRACKET   = r'}'
 
 def t_newline(t):
-    r'\n+'
-    t.lexer.lineno += len(t.value)
+    r'\n'
+    t.lexer.lineno += 1
     t.lexer.linestart = t.lexer.lexpos
-
 
 def t_error(t):
     print(f"Illegal character '{t.value[0]}' at line {t.lineno}")
-    t.lexer.skip(1)
+    #t.lexer.skip(1)
 
 lexer = lex.lex()
 
+# To test lexer.
+lexer.input('You can use your pencil and paper for these next math questions.')
+while True:
+    tok = lexer.token()
+    if not tok: 
+        break      # No more input
+    print(tok)
 
-# Yacc ########################################################################
 
-def p_expression_goal(p):
-    'goal : gift'
+# Yacc #######################################################################
+
+def p_expression_gift(p):
+    'gift : question_set'
     p[0] = p[1]
 
 
-def p_expression_gift(p):
+def p_expression_question_set(p):
     """
-    gift : question_type
-    gift : gift NEWLINE NEWLINE question_type
+    question_set : question_set question
+    question_set : question
     """
+    if len(p) == 3:
+        gift_result.add(p[2])
+    elif len(p) == 2:
+        gift_result.add(p[1])
     p[0] = gift_result
 
 
-def p_expression_question_type(p):
+def p_expresion_question(p):
     """
-    question_type : OPEN_BRACE OPEN_BRACE string CLOSE_BRACE CLOSE_BRACE question
-    question_type : question
+    question : QUESTION answer
+    question : QUESTION missing QUESTIONC
+    question : QUESTIOND
     """
     if len(p) == 2:
-        question = gift_result.questions[-1]
-        question.name = question.text
-    elif len(p) == 7:
-        question = gift_result.questions[-1]
-        question.name = p[3].strip()
+        answer = gift.AnswerFactory.build(None)
+        question = gift.QuestionFactory.build(p[1].strip(), answer, None)
+        p[0] = question
+    else:
+        answer = p[2]
+        text_continue = p[3][1:].strip() if len(p) == 4 else None
+        question = gift.QuestionFactory.build(
+            p[1].strip(), answer, text_continue
+        )
+        p[0] = question
 
 
-def p_expression_question(p):
-    'question : string brace_expr'
-    question = gift_result.questions[-1]
-    question.text = p[1].strip()
-
-
-def p_expression_brace_expr(p):
+def p_expression_missing(p):
     """
-    brace_expr :
-    brace_expr : OPEN_BRACE CLOSE_BRACE
-    brace_expr : OPEN_BRACE answer CLOSE_BRACE question_continue
+    missing : LBRACKET options
+    missing : LBRACKET numerical
     """
-    question = gift.Question()
-
-    if len(p) == 1:
-        question.answer = gift.AnswerFactory.build('')
-    elif len(p) == 3:
-        question.answer = gift.AnswerFactory.build('{}')
-    elif len(p) == 5:
-        question.answer = gift.AnswerFactory.build(p[2])
-        if p[4]:
-            question.text_continue = p[4]
-
-    gift_result.add(question)
-
-
-def p_expression_question_continue(p):
-    """
-    question_continue :
-    question_continue : string
-    """
-    if len(p) == 1:
-        p[0] = ''
-    elif len(p) == 2:
-        p[0] = p[1].strip()
+    p[0] = gift.AnswerFactory.build(options=p[2])
 
 
 def p_expression_answer(p):
-    'answer : string'
-    p[0] = p[1].strip()
-
-
-def p_expression_string(p):
     """
-    string : string CHAR
-    string : CHAR
-    string : string SCAPE CHAR
-    string : string SCAPE OPEN_BRACE
-    string : string SCAPE CLOSE_BRACE
-    string : string SCAPE SCAPE
+    answer : LBRACKET RBRACKET
+    answer : LBRACKET options RBRACKET
+    answer : LBRACKET truefalse RBRACKET
+    answer : LBRACKET numerical RBRACKET
+    answer : MNUMERICAL numerical RBRACKET
+    """
+    if len(p) == 3:
+        p[0] = gift.AnswerFactory.build(options=[])
+    elif len(p) == 4:
+        p[0] = gift.AnswerFactory.build(options=p[2])
+
+
+def p_expression_options(p):
+    """
+    options : options option
+    options : option
     """
     if len(p) == 2:
-        p[0] = p[1]
+        p[0] = [p[1]]
     elif len(p) == 3:
-        p[0] = p[1] + p[2]
-    elif len(p) == 4:
-        p[0] = p[1] + p[2] + p[3]
+        p[0] = p[1] + [p[2]]
 
 
-# Error rule for syntax errors
+def p_expression_option(p):
+    """
+    option : OPTION FEEDBACK
+    option : OPTION
+    """
+    if len(p) == 2:
+        p[0] = gift.Option(text=p[1].strip())
+    elif len(p) == 3:
+        p[0] = gift.Option(text=p[1].strip(), feedback=p[2].strip())
+
+
+def p_expression_truefalse(p):
+    """
+    truefalse : TRUE FEEDBACK
+    truefalse : FALSE FEEDBACK
+    truefalse : TRUE
+    truefalse : FALSE
+    """
+    text = 'True' if p[1].strip() in ['|TRUE', '|true', '|T', '|t'] else 'False'
+    if len(p) == 3:
+        p[0] = [ gift.Option(text=text, feedback=p[2].strip()) ]
+    elif len(p) == 2:
+        p[0] = [ gift.Option(text=text) ]
+
+
+def p_expression_numerical(p):
+    """
+    numerical : NUMERICAL FEEDBACK
+    numerical : RANGE FEEDBACK
+    numerical : NUMERICAL
+    numerical : RANGE
+    numerical : options
+    """
+    if len(p) == 3:
+        p[0] = [ gift.Option(text=p[1].strip(), feedback=p[2].strip()) ]
+    elif len(p) == 2 and isinstance(p[1], str):
+        p[0] = [ gift.Option(text=p[1].strip()) ]
+    elif len(p) == 2 and isinstance(p[1], list):
+        p[0] =  [ gift.Option(text='#' + opt.raw_text[1:]) for opt in p[1] ]
+
+
 def p_error(p):
     if p:
         print(f"Syntax error at '{p.value}' in question number {len(gift_result.questions) + 1}. " + str(p))
         raise Exception(f"Syntax error at '{p.value}' in question number {len(gift_result.questions) + 1}.")
     else:
         print('Syntax error at EOI')
-        raise Exception('Syntax error at EOI: ')
+        raise Exception('Syntax error at EOI.')
 
 
 parser = yacc.yacc()
