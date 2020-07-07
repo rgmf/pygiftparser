@@ -139,7 +139,7 @@ def p_expression_option(p):
     if len(p) == 2:
         p[0] = gift.Option(text=p[1].strip())
     elif len(p) == 3:
-        p[0] = gift.Option(text=p[1].strip(), feedback=p[2].strip())
+        p[0] = gift.Option(text=p[1].strip(), feedback=p[2][1:].strip())
 
 
 def p_expression_truefalse(p):
@@ -151,7 +151,7 @@ def p_expression_truefalse(p):
     """
     text = 'True' if p[1].strip() in ['|TRUE', '|true', '|T', '|t'] else 'False'
     if len(p) == 3:
-        p[0] = [ gift.Option(text=text, feedback=p[2].strip()) ]
+        p[0] = [ gift.Option(text=text, feedback=p[2][1:].strip()) ]
     elif len(p) == 2:
         p[0] = [ gift.Option(text=text) ]
 
@@ -165,11 +165,11 @@ def p_expression_numerical(p):
     numerical : options
     """
     if len(p) == 3:
-        p[0] = [ gift.Option(text=p[1].strip(), feedback=p[2].strip()) ]
+        p[0] = [ gift.Option(text=p[1].strip(), feedback=p[2][1:].strip()) ]
     elif len(p) == 2 and isinstance(p[1], str):
         p[0] = [ gift.Option(text=p[1].strip()) ]
     elif len(p) == 2 and isinstance(p[1], list):
-        p[0] =  [ gift.Option(text='#' + opt.raw_text[1:]) for opt in p[1] ]
+        p[0] =  [ gift.Option(text='#' + opt.raw_text[1:], feedback=opt.feedback) for opt in p[1] ]
 
 
 def p_error(p):

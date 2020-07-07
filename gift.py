@@ -54,6 +54,12 @@ class AnswerFactory(object):
         if Numerical.is_answer(options):
             return Numerical(options=options)
 
+        if Range.is_answer(options):
+            return Range(options=options)
+
+        if MultipleNumerical.is_answer(options):
+            return MultipleNumerical(options=options)
+
         if MultipleChoiceRadio.is_answer(options):
             return MultipleChoiceRadio(options=options)
 
@@ -169,11 +175,11 @@ class Matching(Answer):
         match = self.PATTERN.match(option.text)
         if match:
             return({
-                'pair1': match.group(1).strip(),
-                'pair2': match.group(2).strip()
+                'first': match.group(1).strip(),
+                'second': match.group(2).strip()
             })
         else:
-            return {'pair1': None, 'pair2': None}
+            return {'first': None, 'second': None}
 
 
     @staticmethod
@@ -210,7 +216,101 @@ class Numerical(Answer):
         count = len(list(filter(
             lambda opt: opt.prefix == '#', options))
         )
-        return total > 0 and total == count
+        return total == 1 and total == count and Numerical.is_numerical(options[0].text)
+
+
+    @staticmethod
+    def is_numerical(opt: str) -> bool:
+        r = r'^[+-]?((\d+(\.\d*)?)|(\.\d+))(:[+-]?((\d+(\.\d*)?)|(\.\d+)))?$'
+        p = re.compile(r)
+        return bool(p.match(opt))
+
+
+    def get_number(self) -> float or None:
+        try:
+            return float(self.options[0].text.split(':')[0])
+        except (TypeError, ValueError):
+            return None
+
+
+    def get_error_margin(self) -> float:
+        try:
+            return float(self.options[0].text.split(':')[1])
+        except IndexError:
+            return 0.0
+
+
+class Range(Answer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.number_from = None
+        self.number_to = None
+        if self.options:
+            nums = self.options[0].text.split('..')
+            if len(nums) == 2:
+                opt1 = [ Option(text='#' + nums[0]) ]
+                opt2 = [ Option(text='#' + nums[1]) ]
+                if Numerical.is_answer(opt1) and Numerical.is_answer(opt2):
+                    self.number_from = Numerical(options=opt1)
+                    self.number_to = Numerical(options=opt2)
+
+
+    def __repr__(self):
+        return 'Range()'
+
+
+    @staticmethod
+    def is_answer(options: list) -> bool:
+        total = len(options)
+        count = len(list(filter(
+            lambda opt: opt.prefix == '#', options))
+        )
+        return total == 1 and total == count and Range.is_range(options[0].text)
+
+
+    @staticmethod
+    def is_range(opt: str) -> bool:
+        r = r'^[+-]?\d+(\.\d+)?(:\d+(\.\d+)?)?\.\.[+-]?\d+(\.\d+)?(:\d+(\.\d+)?)?$'
+        p = re.compile(r)
+        return bool(p.match(opt))
+
+
+class MultipleNumerical(Answer):
+    def __init__(self, *args, **kwargs):
+        super().__init__(self, *args, **kwargs)
+        self.numbers = []
+        if self.options:
+            for o in self.options:
+                print()
+                print('-----------------------------------')
+                print(o)
+                print(o.feedback)
+                print('-----------------------------------')
+                if Numerical.is_answer([o]):
+                    self.numbers.append(Numerical(options=[o]))
+                elif Range.is_answer([o]):
+                    self.numbers.append(Range(options=[o]))
+
+
+    def __repr__(self):
+        return 'MultipleNumerical()'
+
+
+    @staticmethod
+    def is_answer(options: list) -> bool:
+        total = len(options)
+        count = len(list(filter(
+            lambda opt: opt.prefix == '#', options))
+        )
+        return total > 1 and total == count and MultipleNumerical.is_multiple(options)
+
+
+    @staticmethod
+    def is_multiple(options: list) -> bool:
+        for o in options:
+            if not Numerical.is_numerical(o.text) and not Range.is_range(o.text):
+                return False
+        return True
 
 
 class MultipleChoiceRadio(Answer):
