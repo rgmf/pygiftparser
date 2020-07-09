@@ -1,0 +1,100 @@
+// Multiple choice.
+
+Who's buried in Grant's tomb?{=Grant ~no one ~Napoleon ~Churchill ~Mother Teresa }
+
+
+// Multiple choice with multiple right answers.
+
+What two people are entombed in Grant's tomb? {
+   ~%-100%No one            # Nooo, no es válido
+   ~%50%Grant               # Muy bien
+   ~%50%Grant's wife        # Perfecto.
+   ~%-100%Grant's father    # No, esta no era.
+}
+
+
+// True-false.
+
+::TrueStatement about Grant::Grant was buried in a tomb in New York City.{T}
+
+::FalseStatement about sun::The sun rises in the West.{FALSE#bien#pero mal}
+
+$CATEGORY: TrueFalseCategory
+
+Una más true-false con feedback.{TRUE#bien#pero mal}
+
+Solo con un feedback.{t#bien}
+
+
+// Short answer.
+
+$CATEGORY: ShortCategory
+
+Who's buried in Grant's tomb?{=Grant =Ulysses S. Grant =Ulysses Grant}
+
+Two plus two equals {=four =4}
+
+$CATEGORY: MatchingCategory
+
+// Matching.
+
+Match the following countries with their corresponding capitals. {
+   =Canada -> Ottawa
+   =Italy  -> Rome
+   =Japan  -> Tokyo
+   =India  -> New Delhi
+   }
+
+
+// Missing word.
+
+$CATEGORY: MissingCategory
+
+Moodle costs {~lots of money =nothing ~a small amount} to download from moodle.org.
+
+Mahatma Gandhi's birthday is an Indian holiday on  {
+~15th
+~3rd
+=2nd
+} of October.
+
+Since {
+  ~495 AD
+  =1066 AD
+  ~1215 AD
+  ~ 43 AD
+}
+the town of Hastings England has been "famous with visitors".
+
+
+// Numerical questions.
+
+$CATEGORY: NumericalCategory
+
+When was Ulysses S. Grant born?{#1822:5}
+
+What is the value of pi (to 3 decimal places)? {#3.14159:0.0005}.
+
+What is the value of pi (to 3 decimal places)? {#3.141..3.142}.
+
+When was Ulysses S. Grant born? {#
+   =1822:0
+   =%50%1822:2
+}
+
+When was Ulysses S. Grant born? {#
+    =1821..1823 
+    =%50%1824..1825
+}
+
+
+$CATEGORY: EssayDescriptionCategory
+
+// Essay.
+
+Write a short biography of Dag Hammarskjöld. {}
+
+
+// Description.
+
+You can use your pencil and paper for these next math questions.
