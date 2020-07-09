@@ -7,8 +7,8 @@ class Gift:
     def __init__(self):
         self.questions = []
 
-    def add(self, q):
-        self.questions.append(q)
+    def add(self, question):
+        self.questions.append(question)
 
 
 class SemanticError(Exception):
@@ -17,7 +17,7 @@ class SemanticError(Exception):
 
 class QuestionFactory(object):
     @classmethod
-    def build(cls, raw_text, answer, text_continue):
+    def build(cls, raw_text, answer, text_continue, category):
         """
         Builds a Question object splitting name and text parts if needed.
         """
@@ -26,7 +26,7 @@ class QuestionFactory(object):
         name = m.group(1).strip() if m and m.group(1) else raw_text
         text = m.group(2).strip() if m and m.group(2) else raw_text
         return Question(
-            name=name, text=text, answer=answer, text_continue=text_continue
+            name=name, text=text, answer=answer, text_continue=text_continue, category=category
         )
 
 
@@ -80,6 +80,7 @@ class Question:
         self.text = kwargs.get('text', None)
         self.text_continue = kwargs.get('text_continue', None)
         self.answer = kwargs.get('answer', None)
+        self.category = kwargs.get('category', None)
 
 
     def is_missing_word(self):
@@ -91,6 +92,10 @@ class Question:
         if self.name:
             res = res + self.name
         res = res + '\n' + 'Text: ' + self.text + ('_______' + self.text_continue if self.text_continue else '')
+        if self.category:
+            res = res + '\n' + 'Category: ' + self.category
+        else:
+            res = res + '\n' + 'Category: None'
         res = res + '\n' + 'Type answer: ' + self.answer.__repr__()
         res = res + '\n' + str(self.answer) + '\n'
         return res
@@ -281,11 +286,6 @@ class MultipleNumerical(Answer):
         self.numbers = []
         if self.options:
             for o in self.options:
-                print()
-                print('-----------------------------------')
-                print(o)
-                print(o.feedback)
-                print('-----------------------------------')
                 if Numerical.is_answer([o]):
                     self.numbers.append(Numerical(options=[o]))
                 elif Range.is_answer([o]):

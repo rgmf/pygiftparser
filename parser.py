@@ -7,6 +7,7 @@ import gift
 
 
 gift_result = gift.Gift()
+category = None
 
 
 # Lex #########################################################################
@@ -24,7 +25,8 @@ tokens = (
     'RANGE',
     'MNUMERICAL',
     'LBRACKET',
-    'RBRACKET'
+    'RBRACKET',
+    'CATEGORY'
 )
 
 t_QUESTION   = r'([^\\{\\}]|\\.)+?(?={)'
@@ -39,6 +41,7 @@ t_RANGE      = r'[ \t]*\#[+-]?\d+(\.\d+)?(:\d+(\.\d+)?)?\.\.[+-]?\d+(\.\d+)?(:\d
 t_MNUMERICAL = r'[ \t]*{[ \t]*\#[ \t]*(?=[=])'
 t_LBRACKET   = r'{'
 t_RBRACKET   = r'}'
+t_CATEGORY   = r'^\$CATEGORY:.*$'
 
 def t_newline(t):
     r'\n'
@@ -72,28 +75,36 @@ def p_expression_question_set(p):
     question_set : question_set question
     question_set : question
     """
-    if len(p) == 3:
+    if len(p) == 3 and isinstance(p[2], gift.Question):
         gift_result.add(p[2])
-    elif len(p) == 2:
+        p[0] = gift_result
+    elif len(p) == 2 and isinstance(p[1], gift.Question):
         gift_result.add(p[1])
-    p[0] = gift_result
+        p[0] = gift_result
 
 
 def p_expresion_question(p):
     """
+    question : CATEGORY
     question : QUESTION answer
     question : QUESTION missing QUESTIONC
     question : QUESTIOND
     """
-    if len(p) == 2:
+    global category
+    if len(p) == 2 and p[1].startswith('$CATEGORY:'):
+        category = p[1][10:].strip()
+        p[0] = category
+    elif len(p) == 2:
         answer = gift.AnswerFactory.build(None)
-        question = gift.QuestionFactory.build(p[1].strip(), answer, None)
+        question = gift.QuestionFactory.build(
+            p[1].strip(), answer, None, category
+        )
         p[0] = question
     else:
         answer = p[2]
         text_continue = p[3][1:].strip() if len(p) == 4 else None
         question = gift.QuestionFactory.build(
-            p[1].strip(), answer, text_continue
+            p[1].strip(), answer, text_continue, category
         )
         p[0] = question
 
