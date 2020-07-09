@@ -1,10 +1,3 @@
-# Status
-This program has been tested with all GIFT files that you can find inside `example_files`. Also, it has been developed unit tests and all of them passed.
-
-Nevertheless it's in an alpha status because it needs more robust tests and this must not be used in production.
-
-Use it in your own risk.
-
 # Python Moodle GIFT parser
 Python Moodle GIFT parser is a parser for GIFT files: https://docs.moodle.org/38/en/GIFT_format
 
