@@ -1,5 +1,5 @@
 import argparse
-import parser
+from pygiftparser import parser
 
 
 def parse_input_arguments():

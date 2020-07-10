@@ -1,7 +1,7 @@
 import unittest
 
-import parser
-from gift import MultipleChoiceRadio
+from pygiftparser import parser
+from pygiftparser.gift import MultipleChoiceRadio
 
 
 class TestMultipleChoiceRadioQuestion(unittest.TestCase):

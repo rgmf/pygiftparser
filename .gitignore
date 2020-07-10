@@ -1,4 +1,8 @@
+build/*
+dist/*
+pygiftparserrgmf.egg-info/*
 __pycache__/*
 tests/__pycache__/*
-*.out
-*tab.py
+pygiftparser/__pycache__/*
+pygiftparser/*.out
+pygiftparser/*tab.py

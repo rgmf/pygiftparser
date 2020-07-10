@@ -1,7 +1,7 @@
 import unittest
 
-import parser
-from gift import Short
+from pygiftparser import parser
+from pygiftparser.gift import Short
 
 
 class TestShortQuestion(unittest.TestCase):

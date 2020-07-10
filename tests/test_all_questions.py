@@ -1,7 +1,7 @@
 import unittest
 
-import parser
-from gift import (
+from pygiftparser import parser
+from pygiftparser.gift import (
     MultipleChoiceCheckbox,
     MultipleChoiceRadio,
     TrueFalse,

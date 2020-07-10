@@ -1,7 +1,7 @@
 import unittest
 
-import parser
-from gift import Range, Numerical
+from pygiftparser import parser
+from pygiftparser.gift import Range, Numerical
 
 
 class TestNumericalRangeQuestion(unittest.TestCase):
