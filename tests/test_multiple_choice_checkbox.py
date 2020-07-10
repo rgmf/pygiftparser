@@ -1,7 +1,7 @@
 import unittest
 
-import parser
-from gift import MultipleChoiceCheckbox
+from pygiftparser import parser
+from pygiftparser.gift import MultipleChoiceCheckbox
 
 
 class TestMultipleChoiceCheckboxQuestion(unittest.TestCase):

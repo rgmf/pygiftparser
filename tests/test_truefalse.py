@@ -1,7 +1,7 @@
 import unittest
 
-import parser
-from gift import TrueFalse
+from pygiftparser import parser
+from pygiftparser.gift import TrueFalse
 
 
 class TestTrueFalseQuestion(unittest.TestCase):

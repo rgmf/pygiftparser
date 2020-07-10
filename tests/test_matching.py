@@ -1,7 +1,7 @@
 import unittest
 
-import parser
-from gift import Matching, Short
+from pygiftparser import parser
+from pygiftparser.gift import Matching, Short
 
 
 class TestMatchingQuestion(unittest.TestCase):

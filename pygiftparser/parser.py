@@ -2,8 +2,8 @@ import argparse
 from ply import lex
 import ply.yacc as yacc
 
-import preprocessor
-import gift
+from . import preprocessor
+from . import gift
 
 
 gift_result = gift.Gift()

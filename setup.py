@@ -6,7 +6,7 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='pygiftparserrgmf',
-    version='0.0.1',
+    version='0.0.2',
     author='Román Ginés Martínez Ferrández',
     author_email='rgmf@riseup.net',
     description='Moodle GIFT files parser',

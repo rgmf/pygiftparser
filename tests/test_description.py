@@ -1,7 +1,7 @@
 import unittest
 
-import parser
-from gift import Description
+from pygiftparser import parser
+from pygiftparser.gift import Description
 
 
 class TestDescriptionQuestion(unittest.TestCase):
