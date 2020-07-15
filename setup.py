@@ -6,9 +6,10 @@ with open('README.md', 'r') as fh:
 
 setuptools.setup(
     name='pygiftparserrgmf',
-    version='0.0.2',
-    author='Román Ginés Martínez Ferrández',
+    version='0.0.4',
+    author='Román Martínez',
     author_email='rgmf@riseup.net',
+    install_requires=['ply'],
     description='Moodle GIFT files parser',
     long_description=long_description,
     long_description_content_type='text/markdown',

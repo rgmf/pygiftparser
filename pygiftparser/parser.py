@@ -6,7 +6,7 @@ from . import preprocessor
 from . import gift
 
 
-gift_result = gift.Gift()
+gift_result = None
 category = None
 
 
@@ -196,5 +196,11 @@ parser = yacc.yacc()
 
 
 def parse(s):
+    global gift_result
+    global category
+
+    gift_result = gift.Gift()
+    category = None
+
     res = preprocessor.preprocess(s)
     return parser.parse(res)
