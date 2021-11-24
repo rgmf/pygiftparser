@@ -147,7 +147,7 @@ class TestMultipleChoiceCheckboxQuestionWithName(TestMultipleChoiceCheckboxQuest
 
 
     def test_name_and_text_of_questions(self):
-        self.assertEqual(self.question.name, "With name\=4: yes")
+        self.assertEqual(self.question.name, "With name=4: yes")
         self.assertEqual(self.question.text, "What two people are entombed in Grant's tomb?")
         self.assertEqual(self.question.text_continue, None)
 

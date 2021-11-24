@@ -24,7 +24,21 @@ class QuestionFactory(object):
         p = re.compile(r'^::(.+)::(.+)$')
         m = p.match(raw_text)
         name = m.group(1).strip() if m and m.group(1) else raw_text
+        name = name\
+            .replace("\\:", ":")\
+            .replace("\\~", "~")\
+            .replace("\\=", "=")\
+            .replace("\\#", "#")\
+            .replace("\\{", "{")\
+            .replace("\\}", "}")
         text = m.group(2).strip() if m and m.group(2) else raw_text
+        text = text\
+            .replace("\\:", ":")\
+            .replace("\\~", "~")\
+            .replace("\\=", "=")\
+            .replace("\\#", "#")\
+            .replace("\\{", "{")\
+            .replace("\\}", "}")
         return Question(
             name=name, text=text, answer=answer, text_continue=text_continue, category=category
         )
