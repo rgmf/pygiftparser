@@ -12,7 +12,7 @@ You can install it like a package using `pip` from pypi.org: `pip install pygift
 After that, you can parse a file like this:
 
 ```python
-from pygiftparserrgmf import parser
+from pygiftparser import parser
 
 with open('gift_file.txt', 'r') as myfile:
     s = myfile.read()
