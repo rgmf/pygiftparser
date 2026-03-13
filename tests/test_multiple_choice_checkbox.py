@@ -208,3 +208,46 @@ class TestMultipleChoiceCheckboxQuestionError(unittest.TestCase):
                 ~%-100%Grant's father    # No, esta no era.
             """
             )
+
+class TestMultipleChoiceCheckboxQuestionFloatPercentage(TestMultipleChoiceCheckboxQuestion):
+    def setUp(self):
+        self.result = parser.parse(
+            """
+            // Multiple choice with multiple right answers.
+
+            What two people are entombed in Grant's tomb? {
+                ~%-100%No one            # Nooo, no es válido
+                ~%49.99995%Grant        # Muy bien
+                ~%50.00005%Grant's wife  # Perfecto.
+                ~%-100%Grant's father    # No, esta no era.
+            }
+            """
+        )
+        self.question = self.result.questions[0]
+        self.answer = self.question.answer
+        self.options = self.answer.options
+
+    def test_options(self):
+        self.assertEqual(self.options[0].prefix, '~')
+        self.assertEqual(self.options[0].text, 'No one')
+        self.assertEqual(self.options[0].raw_text, '~%-100%No one')
+        self.assertEqual(self.options[0].percentage, -1.0)
+        self.assertEqual(self.options[0].feedback, 'Nooo, no es válido')
+
+        self.assertEqual(self.options[1].prefix, '~')
+        self.assertEqual(self.options[1].text, 'Grant')
+        self.assertEqual(self.options[1].raw_text, '~%49.99995%Grant')
+        self.assertEqual(self.options[1].percentage, 0.4999995)
+        self.assertEqual(self.options[1].feedback, 'Muy bien')
+
+        self.assertEqual(self.options[2].prefix, '~')
+        self.assertEqual(self.options[2].text, "Grant's wife")
+        self.assertEqual(self.options[2].raw_text, "~%50.00005%Grant's wife")
+        self.assertEqual(self.options[2].percentage, 0.5000005)
+        self.assertEqual(self.options[2].feedback, 'Perfecto.')
+
+        self.assertEqual(self.options[3].prefix, '~')
+        self.assertEqual(self.options[3].text, "Grant's father")
+        self.assertEqual(self.options[3].raw_text, "~%-100%Grant's father")
+        self.assertEqual(self.options[3].percentage, -1.0)
+        self.assertEqual(self.options[3].feedback, 'No, esta no era.')
