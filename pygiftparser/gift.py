@@ -146,13 +146,13 @@ class Option:
 
     def _extract_parts(self, raw_text):
         if raw_text:
-            pattern = re.compile(r'^[#=~](%(-{0,1}[0-9]+)%)?(.+)$')
+            pattern = re.compile(r'^[#=~](%(-{0,1}[0-9]+(?:\.[0-9]+)?)%)?(.+)$')
             match = pattern.match(raw_text)
             if match:
                 prefix = raw_text[0]
                 text = match.group(3)
                 if match.group(2):
-                    percentage = int(match.group(2))/100
+                    percentage = round(float(match.group(2))/100, 7)
                 elif prefix == '=' or prefix == '#':
                     percentage  = 1.0
                 else:
